@@ -4,7 +4,7 @@ function App() {
   return (
     <div style={{ padding: '2rem', fontFamily: 'Arial, sans-serif' }}>
       <img 
-        src="/logo.jpeg" 
+        src="/logo_white_bg_refined.jpeg" 
         alt="Timeless Links Logo" 
         style={{ width: '150px', marginBottom: '1rem' }} 
       />
