@@ -1,5 +1,6 @@
 import Counter from './Counter';
 import ChatUI from './ChatUI';
+import Scheduler from './Scheduler';
 
 function App() {
   return (
@@ -10,10 +11,17 @@ function App() {
         style={{ width: '150px', marginBottom: '1rem' }} 
       />
       <h1>Welcome to Timeless Links</h1>
-      <p>This is your interactive counter UI:</p>
+      <p>This is your interactive AI + scheduling assistant.</p>
+
+      <hr style={{ margin: '2rem 0' }} />
+      <h2>🔢 Interactive Counter</h2>
       <Counter />
+
       <hr style={{ margin: '2rem 0' }} />
       <ChatUI />
+
+      <hr style={{ margin: '2rem 0' }} />
+      <Scheduler />
     </div>
   );
 }

@@ -9,7 +9,8 @@ function ChatUI() {
     if (!input.trim()) return;
 
     const userMessage = { role: 'user', content: input };
-    setMessages((prev) => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     setInput('');
     setLoading(true);
 
@@ -17,15 +18,17 @@ function ChatUI() {
       const response = await fetch('/.netlify/functions/chatgpt', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({ messages: newMessages }),
       });
 
       const data = await response.json();
 
-      setMessages((prev) => [
-        ...prev,
-        { role: 'assistant', content: data.reply },
-      ]);
+      const assistantReply = {
+        role: 'assistant',
+        content: data.reply,
+      };
+
+      setMessages((prev) => [...prev, assistantReply]);
     } catch (err) {
       console.error(err);
       setMessages((prev) => [
@@ -40,7 +43,7 @@ function ChatUI() {
   return (
     <div style={{ maxWidth: 600, margin: '2rem auto', fontFamily: 'sans-serif' }}>
       <h2>💬 Chat with Timeless Links AI</h2>
-      <div style={{ border: '1px solid #ccc', padding: '1rem', borderRadius: 8 }}>
+      <div style={{ border: '1px solid #ccc', padding: '1rem', borderRadius: 8, minHeight: '200px' }}>
         {messages.map((msg, i) => (
           <div key={i} style={{ marginBottom: '0.5rem' }}>
             <strong>{msg.role === 'user' ? 'You' : 'AI'}:</strong> {msg.content}
