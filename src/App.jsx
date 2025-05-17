@@ -1,4 +1,5 @@
 import Counter from './Counter';
+import ChatUI from './ChatUI';
 
 function App() {
   return (
@@ -11,6 +12,8 @@ function App() {
       <h1>Welcome to Timeless Links</h1>
       <p>This is your interactive counter UI:</p>
       <Counter />
+      <hr style={{ margin: '2rem 0' }} />
+      <ChatUI />
     </div>
   );
 }
