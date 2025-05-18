@@ -8,7 +8,13 @@ function App() {
       <img 
         src="/logo_white_bg_refined.jpeg" 
         alt="Timeless Links Logo" 
-        style={{ width: '150px', marginBottom: '1rem' }} 
+        style={{ 
+        width: '150px', 
+        marginBottom: '1rem',
+        display: 'block',
+        marginLeft: 'auto',
+        marginRight: 'auto'
+        }} 
       />
       <h1>Welcome to Timeless Links</h1>
       <p>This is your interactive AI + scheduling assistant.</p>
