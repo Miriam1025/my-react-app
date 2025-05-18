@@ -1,5 +1,5 @@
 import Counter from './Counter';
-import ChatUI from './ChatUI';
+import ChatUI from './chatUI';
 import Scheduler from './Scheduler';
 
 function App() {
