@@ -28,6 +28,22 @@ function App() {
 
       <hr style={{ margin: '2rem 0' }} />
       <Scheduler />
+
+            <hr style={{ margin: '2rem 0' }} />
+
+      <h2>💻 Build Link</h2>
+      <p style={{ maxWidth: '600px', margin: '0 auto' }}>
+        Custom development support for websites, apps, and automation tools. Let’s bring your idea to life — with clear, personal tech help.
+      </p>
+      <a 
+        href="https://buy.stripe.com/test_8x2cN72wT5Wt7Ab3a00Ny00" 
+        target="_blank" 
+        rel="noopener noreferrer"
+      >
+        <button style={{ padding: '1rem 2rem', fontSize: '1rem', marginTop: '1rem' }}>
+          Book Build Link
+        </button>
+      </a>
     </div>
   );
 }
