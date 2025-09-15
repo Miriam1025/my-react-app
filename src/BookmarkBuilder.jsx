@@ -17,7 +17,7 @@ function BookmarkBuilder() {
   const themes = {
     corporate: {
       name: 'Corporate Blue',
-      colors: { primary: '#1e3c72', secondary: '#2a5298', text: '#333' },
+      colors: { primary: '#1e3c72', secondary: '#2a5298', text: '#fff' },
       gradient: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)'
     },
     dark: {
