@@ -7,7 +7,6 @@ function App() {
   return (
     <Router>
       <div className="App">
-        {/* Routes */}
         <Routes>
           <Route path="/" element={<SalesPage />} />
           <Route path="/examples" element={<Examples />} />
@@ -18,6 +17,4 @@ function App() {
   );
 }
 
-export default App;
-
-export default App;
+export default Ap
