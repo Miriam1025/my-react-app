@@ -8,10 +8,10 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Timeless Links',
-        short_name: 'Timeless',
-        description: 'AI chat + scheduling assistant',
-        theme_color: '#ffffff',
+        name: 'Beautiful Bookmark Pages',  // Changed this
+        short_name: 'Bookmarks',           // Changed this
+        description: 'Create stunning bookmark pages in minutes',  // Updated description
+        theme_color: '#667eea',            // Updated to match your brand colors
         background_color: '#ffffff',
         display: 'standalone',
         start_url: '/',
