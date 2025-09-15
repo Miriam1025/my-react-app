@@ -77,7 +77,7 @@ function SalesPage() {
             onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
             onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
           >
-            👀 See Live Examples & Themes
+            👀 See Examples & Themes
           </a>
         </div>
       </section>
@@ -89,7 +89,7 @@ function SalesPage() {
             Why Choose Our Bookmark Builder?
           </h2>
           <p style={{ textAlign: 'center', fontSize: '1.2em', color: '#666', marginBottom: '60px', maxWidth: '600px', marginLeft: 'auto', marginRight: 'auto' }}>
-            Everything you need to create organized, beautiful bookmark pages that work offline
+            Create your own custom home page with organized & beautiful bookmark pages that work offline
           </p>
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
