@@ -57,6 +57,31 @@ function SalesPage() {
         </div>
       </section>
 
+      {/* Examples Link Section */}
+      <section style={{ padding: '60px 20px', background: 'white' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+          <a 
+            href="/examples"
+            style={{
+              display: 'inline-block',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              padding: '15px 30px',
+              borderRadius: '30px',
+              textDecoration: 'none',
+              fontSize: '1.1em',
+              fontWeight: '600',
+              boxShadow: '0 8px 25px rgba(102, 126, 234, 0.3)',
+              transition: 'transform 0.3s ease'
+            }}
+            onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
+            onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+          >
+            👀 See Live Examples & Themes
+          </a>
+        </div>
+      </section>
+
       {/* Why Choose Section */}
       <section style={{ padding: '80px 20px' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
