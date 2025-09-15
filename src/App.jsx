@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import SalesPage from './SalesPage';
-import ChatUI from './chatui';
-import Scheduler from './Scheduler';
+import ChatUI from './chatui.jsx';
+import Scheduler from './Scheduler.jsx';
 
 function App() {
   return (
