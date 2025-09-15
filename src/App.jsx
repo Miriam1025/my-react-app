@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import SalesPage from './SalesPage';
-import Scheduler from './Scheduler.jsx';
 
 function App() {
   return (
@@ -29,29 +28,12 @@ function App() {
             }}>
               🔖 Timeless Links
             </Link>
-            <Link to="/" style={{ 
-              textDecoration: 'none', 
-              color: '#666',
-              padding: '0.5rem 1rem',
-              borderRadius: '5px'
-            }}>
-              Home
-            </Link>
-            <Link to="/scheduler" style={{ 
-              textDecoration: 'none', 
-              color: '#666',
-              padding: '0.5rem 1rem',
-              borderRadius: '5px'
-            }}>
-              Book Appointment
-            </Link>
           </div>
         </nav>
 
         {/* Routes */}
         <Routes>
           <Route path="/" element={<SalesPage />} />
-          <Route path="/scheduler" element={<Scheduler />} />
         </Routes>
       </div>
     </Router>
