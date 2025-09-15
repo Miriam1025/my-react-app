@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import SalesPage from './SalesPage';
-import ChatUI from './chatui.jsx';
 import Scheduler from './Scheduler.jsx';
 
 function App() {
@@ -38,14 +37,6 @@ function App() {
             }}>
               Home
             </Link>
-            <Link to="/chat" style={{ 
-              textDecoration: 'none', 
-              color: '#666',
-              padding: '0.5rem 1rem',
-              borderRadius: '5px'
-            }}>
-              AI Chat
-            </Link>
             <Link to="/scheduler" style={{ 
               textDecoration: 'none', 
               color: '#666',
@@ -60,7 +51,6 @@ function App() {
         {/* Routes */}
         <Routes>
           <Route path="/" element={<SalesPage />} />
-          <Route path="/chat" element={<ChatUI />} />
           <Route path="/scheduler" element={<Scheduler />} />
         </Routes>
       </div>
