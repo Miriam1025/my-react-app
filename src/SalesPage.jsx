@@ -240,22 +240,23 @@ function SalesPage() {
               <li style={{ padding: '10px 0', fontSize: '1.1em' }}>✓ 30-day money-back guarantee</li>
             </ul>
             
-            <a 
-              href="#" 
+            <button 
               style={{
                 display: 'inline-block',
                 background: '#ff6b6b',
                 color: 'white',
                 padding: '15px 40px',
                 borderRadius: '50px',
-                textDecoration: 'none',
+                border: 'none',
                 fontSize: '1.2em',
                 fontWeight: '600',
+                cursor: 'pointer',
                 transition: 'transform 0.3s ease'
               }}
+              onClick={() => alert('Payment integration would go here')}
             >
               Buy Now - Instant Download
-            </a>
+            </button>
           </div>
         </div>
       </section>
@@ -268,36 +269,69 @@ function SalesPage() {
           </h2>
           
           <div style={{ background: 'white', marginBottom: '20px', borderRadius: '10px', boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)' }}>
-            <div 
-              style={{ padding: '25px', fontWeight: 600, color: '#2c3e50', cursor: 'pointer', fontSize: '1.1em' }}
+            <button 
+              style={{ 
+                padding: '25px', 
+                fontWeight: 600, 
+                color: '#2c3e50', 
+                cursor: 'pointer', 
+                fontSize: '1.1em',
+                width: '100%',
+                textAlign: 'left',
+                background: 'none',
+                border: 'none'
+              }}
               onClick={handleFaqClick}
+              onKeyDown={(e) => e.key === 'Enter' && handleFaqClick(e)}
             >
               How do I use my bookmark page after I create it?
-            </div>
+            </button>
             <div style={{ padding: '0 25px 25px', color: '#666', lineHeight: 1.6, display: 'none' }}>
               Super simple! After you click "Create My Page", a file downloads to your computer (usually in your Downloads folder). Just double-click that file and it opens in your web browser. Then bookmark that page in your browser so you can find it easily anytime!
             </div>
           </div>
           
           <div style={{ background: 'white', marginBottom: '20px', borderRadius: '10px', boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)' }}>
-            <div 
-              style={{ padding: '25px', fontWeight: 600, color: '#2c3e50', cursor: 'pointer', fontSize: '1.1em' }}
+            <button 
+              style={{ 
+                padding: '25px', 
+                fontWeight: 600, 
+                color: '#2c3e50', 
+                cursor: 'pointer', 
+                fontSize: '1.1em',
+                width: '100%',
+                textAlign: 'left',
+                background: 'none',
+                border: 'none'
+              }}
               onClick={handleFaqClick}
+              onKeyDown={(e) => e.key === 'Enter' && handleFaqClick(e)}
             >
               Do I need to know coding to use this?
-            </div>
+            </button>
             <div style={{ padding: '0 25px 25px', color: '#666', lineHeight: 1.6, display: 'none' }}>
               Not at all! The builder uses simple forms - just type in your website names and URLs. No HTML, CSS, or JavaScript knowledge required.
             </div>
           </div>
           
           <div style={{ background: 'white', marginBottom: '20px', borderRadius: '10px', boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)' }}>
-            <div 
-              style={{ padding: '25px', fontWeight: 600, color: '#2c3e50', cursor: 'pointer', fontSize: '1.1em' }}
+            <button 
+              style={{ 
+                padding: '25px', 
+                fontWeight: 600, 
+                color: '#2c3e50', 
+                cursor: 'pointer', 
+                fontSize: '1.1em',
+                width: '100%',
+                textAlign: 'left',
+                background: 'none',
+                border: 'none'
+              }}
               onClick={handleFaqClick}
+              onKeyDown={(e) => e.key === 'Enter' && handleFaqClick(e)}
             >
               Will this work on my phone/tablet?
-            </div>
+            </button>
             <div style={{ padding: '0 25px 25px', color: '#666', lineHeight: 1.6, display: 'none' }}>
               Yes! All themes are fully responsive and look great on desktop, tablet, and mobile devices.
             </div>
