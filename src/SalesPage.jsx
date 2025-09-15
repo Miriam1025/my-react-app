@@ -38,7 +38,8 @@ function SalesPage() {
           <div style={{ fontSize: '2em', fontWeight: 700, margin: '20px 0 10px' }}>$29</div>
           <div style={{ opacity: 0.8, fontSize: '0.9em', marginBottom: '30px' }}>One-time purchase • Instant download</div>
           <a 
-            href="#purchase" 
+            href="https://buy.stripe.com/7sY8wPfd5dsgbNOeIebEA00"
+            target="_blank"
             style={{
               display: 'inline-block',
               background: '#ff6b6b',
@@ -278,7 +279,7 @@ function SalesPage() {
                 cursor: 'pointer',
                 transition: 'transform 0.3s ease'
               }}
-              onClick={() => alert('Payment integration would go here')}
+              onClick={() => window.open('https://buy.stripe.com/7sY8wPfd5dsgbNOeIebEA00', '_blank')}
             >
               Buy Now - Instant Download
             </button>
