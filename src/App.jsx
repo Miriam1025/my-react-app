@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import SalesPage from './SalesPage';
 import Examples from './Examples';
+import BookmarkBuilder from './BookmarkBuilder';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Routes>
           <Route path="/" element={<SalesPage />} />
           <Route path="/examples" element={<Examples />} />
+          <Route path="/builder" element={<BookmarkBuilder />} />
           <Route path="*" element={<SalesPage />} />
         </Routes>
       </div>
