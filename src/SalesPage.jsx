@@ -12,7 +12,7 @@ function SalesPage() {
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <img 
-            src="/dist/assets/logo_white_bg_refined.jpeg" 
+            src="/logo_white_bg_refined.jpeg" 
             alt="Timeless Links Logo" 
             style={{ 
               width: '120px', 
