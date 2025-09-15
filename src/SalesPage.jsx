@@ -279,7 +279,7 @@ function SalesPage() {
                 cursor: 'pointer',
                 transition: 'transform 0.3s ease'
               }}
-              onClick={() => window.open('https://buy.stripe.com/7sY8wPfd5dsgbNOeIebEA00', '_blank')}
+              onClick={() => window.open('https://buy.stripe.com/7sY8wPfd5dsgbNOeIebEA00')}
             >
               Buy Now - Instant Download
             </button>
