@@ -25,8 +25,8 @@ export default function SalesPage() {
       {/* Hero */}
       <section style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', padding: '80px 20px', textAlign: 'center' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <h1 style={{ fontSize: '3em', fontWeight: 700, marginBottom: '16px', lineHeight: 1.15 }}>Create Beautiful Bookmark Pages in Minutes</h1>
-          <p style={{ fontSize: '1.1em', marginBottom: '12px', opacity: 0.95 }}>Organize your favorite websites with stunning, professional designs. No coding required!</p>
+          <h1 style={{ fontSize: '3em', fontWeight: 700, marginBottom: '16px', lineHeight: 1.15 }}>Your personal start page for bookmarks</h1>
+          <p style={{ fontSize: '1.1em', marginBottom: '12px', opacity: 0.95 }}>Build a private, beautiful home page to organize and launch your favorite sites — no code required.</p>
           <div style={{ fontSize: '1.4em', fontWeight: 700, margin: '6px 0' }}>$29</div>
           <div style={{ opacity: 0.9, fontSize: '0.95em', marginBottom: '8px' }}>One-time purchase • Instant download</div>
         </div>
@@ -35,7 +35,7 @@ export default function SalesPage() {
       {/* Examples */}
       <section style={{ padding: '48px 20px', background: 'white' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto', textAlign: 'center' }}>
-          <div style={{ marginBottom: 18, fontSize: '1.05em', color: '#444' }}>See our product in context — jump to a sample page tailored to your needs.</div>
+          <div style={{ marginBottom: 18, fontSize: '1.05em', color: '#444' }}>Preview sample start pages and pick one that fits how you work.</div>
 
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 22 }}>
             <a
@@ -138,7 +138,7 @@ export default function SalesPage() {
       {/* Final CTA */}
       <section style={{ padding: '48px 20px', textAlign: 'center' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <h3 style={{ fontSize: '1.6em', marginBottom: '12px' }}>Ready to create your first page?</h3>
+          <h3 style={{ fontSize: '1.6em', marginBottom: '12px' }}>Ready to build your bookmark start page?</h3>
           <a href="https://buy.stripe.com/7sY8wPfd5dsgbNOeIebEA00" target="_blank" rel="noreferrer" onMouseDown={() => playClickSound()} className="sales-cta" style={{ background: '#06b6d4', color: 'white', padding: '14px 32px', borderRadius: 12 }}>
             Get Started Now — $29
           </a>
