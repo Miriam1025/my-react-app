@@ -40,9 +40,9 @@ export const secureClear = (value) => {
   // This is a best-effort approach to clear sensitive data
   // JavaScript doesn't give us direct memory management
   if (typeof value === 'string') {
-    // Overwrite the string with random data
+    // Overwrite the string with random data (no-op in JS, but included for demo)
     for (let i = 0; i < 3; i++) {
-      value = Math.random().toString(36);
+      // No actual effect; included for demonstration purposes only
     }
   }
 };
@@ -94,7 +94,7 @@ export const getCredentialTitle = (url) => {
     
     // Capitalize first letter
     return domain.charAt(0).toUpperCase() + domain.slice(1);
-  } catch (error) {
+  } catch {
     // If URL parsing fails, return the original string
     return url;
   }
