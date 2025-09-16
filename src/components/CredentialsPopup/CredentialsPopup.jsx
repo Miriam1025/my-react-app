@@ -6,6 +6,7 @@ import { CredentialsDisplay } from './CredentialsDisplay';
 import { useCredentialsSecurity } from './hooks/useCredentialsSecurity';
 import { validatePin } from './utils/credentialsUtils';
 import './CredentialsPopup.css';
+import PropTypes from 'prop-types';
 
 const CredentialsPopup = ({ 
   isOpen, 
@@ -105,6 +106,13 @@ const CredentialsPopup = ({
       </div>
     </PopupOverlay>
   );
+};
+CredentialsPopup.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  linkUrl: PropTypes.string,
+  credentials: PropTypes.object.isRequired,
+  masterPin: PropTypes.string
 };
 
 export default CredentialsPopup;
