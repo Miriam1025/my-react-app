@@ -3,7 +3,7 @@ import BookmarkBuilder from './BookmarkBuilder';
 import { playClickSound } from '../utils/sound';
 
 export default function SalesPage() {
-  const isTestMode = window.location.search.includes('test=true');
+  const isTestMode = typeof window !== 'undefined' && window.location.search.includes('test=true');
   if (isTestMode) return <BookmarkBuilder />;
 
   const personaStyle = (bg, color) => ({
@@ -15,17 +15,18 @@ export default function SalesPage() {
     fontWeight: 700,
     border: '1px solid rgba(0,0,0,0.06)',
     boxShadow: '0 8px 24px rgba(0,0,0,0.14)',
-    transition: 'transform 120ms ease, box-shadow 120ms ease'
+    transition: 'transform 120ms ease, box-shadow 120ms ease',
+    display: 'inline-block'
   });
 
   return (
     <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', lineHeight: 1.6, color: '#333' }}>
       {/* Hero */}
-      <section style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', padding: '100px 20px', textAlign: 'center' }}>
+      <section style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', padding: '80px 20px', textAlign: 'center' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <h1 style={{ fontSize: '3.5em', fontWeight: 700, marginBottom: '20px', lineHeight: 1.15 }}>Create Beautiful Bookmark Pages in Minutes</h1>
-          <p style={{ fontSize: '1.25em', marginBottom: '20px', opacity: 0.95 }}>Organize your favorite websites with stunning, professional designs. No coding required!</p>
-          <div style={{ fontSize: '1.7em', fontWeight: 700, margin: '6px 0' }}>$29</div>
+          <h1 style={{ fontSize: '3em', fontWeight: 700, marginBottom: '16px', lineHeight: 1.15 }}>Create Beautiful Bookmark Pages in Minutes</h1>
+          <p style={{ fontSize: '1.1em', marginBottom: '12px', opacity: 0.95 }}>Organize your favorite websites with stunning, professional designs. No coding required!</p>
+          <div style={{ fontSize: '1.4em', fontWeight: 700, margin: '6px 0' }}>$29</div>
           <div style={{ opacity: 0.9, fontSize: '0.95em', marginBottom: '8px' }}>One-time purchase • Instant download</div>
         </div>
       </section>
@@ -36,19 +37,104 @@ export default function SalesPage() {
           <div style={{ marginBottom: 18, fontSize: '1.05em', color: '#444' }}>See our product in context — jump to a sample page tailored to your needs.</div>
 
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 22 }}>
-            <a href="/examples#student" onMouseDown={() => playClickSound()} style={personaStyle('#184e8b', '#fff')} onFocus={(e) => e.currentTarget.style.transform = 'translateY(-3px)'} onBlur={(e) => e.currentTarget.style.transform = 'translateY(0)'}>👩‍🎓 Student Study Hub</a>
-            <a href="/examples#freelancer" onMouseDown={() => playClickSound()} style={personaStyle('#0f172a', '#fff')} onFocus={(e) => e.currentTarget.style.transform = 'translateY(-3px)'} onBlur={(e) => e.currentTarget.style.transform = 'translateY(0)'}>💼 Freelancer Dashboard</a>
-            <a href="/examples#designer" onMouseDown={() => playClickSound()} style={personaStyle('linear-gradient(180deg,#7a6ce0,#f7d9fb)')} onFocus={(e) => e.currentTarget.style.transform = 'translateY(-3px)'} onBlur={(e) => e.currentTarget.style.transform = 'translateY(0)'}>🎨 Designer Inspiration</a>
-            <a href="/examples#family" onMouseDown={() => playClickSound()} style={personaStyle('#0b5e43', '#fff')} onFocus={(e) => e.currentTarget.style.transform = 'translateY(-3px)'} onBlur={(e) => e.currentTarget.style.transform = 'translateY(0)'}>👨‍👩‍👧‍👦 Family Hub</a>
+            <a
+              href="/examples#student"
+              onMouseDown={() => playClickSound()}
+              onFocus={(e) => (e.currentTarget.style.transform = 'translateY(-3px)')}
+              onBlur={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+              style={personaStyle('#184e8b', '#fff')}
+            >
+              👩‍🎓 Student Study Hub
+            </a>
+
+            <a
+              href="/examples#freelancer"
+              onMouseDown={() => playClickSound()}
+              onFocus={(e) => (e.currentTarget.style.transform = 'translateY(-3px)')}
+              onBlur={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+              style={personaStyle('#0f172a', '#fff')}
+            >
+              💼 Freelancer Dashboard
+            </a>
+
+            <a
+              href="/examples#designer"
+              onMouseDown={() => playClickSound()}
+              onFocus={(e) => (e.currentTarget.style.transform = 'translateY(-3px)')}
+              onBlur={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+              style={personaStyle('linear-gradient(180deg,#7a6ce0,#f7d9fb)')}
+            >
+              🎨 Designer Inspiration
+            </a>
+
+            <a
+              href="/examples#family"
+              onMouseDown={() => playClickSound()}
+              onFocus={(e) => (e.currentTarget.style.transform = 'translateY(-3px)')}
+              onBlur={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+              style={personaStyle('#0b5e43', '#fff')}
+            >
+              👨‍👩‍👧‍👦 Family Hub
+            </a>
           </div>
 
+          {/* CTA under examples */}
           <div style={{ marginTop: 18 }}>
-            <a href="https://buy.stripe.com/7sY8wPfd5dsgbNOeIebEA00" target="_blank" rel="noreferrer" onMouseDown={() => playClickSound()} style={{ padding: '12px 26px', borderRadius: 14, background: '#ff6b6b', color: 'white', textDecoration: 'none', fontWeight: 800, boxShadow: '0 12px 36px rgba(0,0,0,0.12)' }}>Get Started Now — $29</a>
+            <a
+              href="https://buy.stripe.com/7sY8wPfd5dsgbNOeIebEA00"
+              target="_blank"
+              rel="noreferrer"
+              onMouseDown={() => playClickSound()}
+              style={{ padding: '12px 26px', borderRadius: 14, background: '#ff6b6b', color: 'white', textDecoration: 'none', fontWeight: 800, boxShadow: '0 12px 36px rgba(0,0,0,0.12)' }}
+            >
+              Get Started Now — $29
+            </a>
           </div>
 
-              <div style={{ marginTop: 12, fontSize: '0.9em', color: '#666' }}>Each example opens a sample page. Click the "Return to Sales Page" button at the top of that example to come back here.</div>
-            </div>
-          </section>
+          <div style={{ marginTop: 12, fontSize: '0.9em', color: '#666' }}>Each example opens a sample page. Use the "Return to Sales Page" link on examples to come back here.</div>
         </div>
-      );
-    }
+      </section>
+
+      {/* Why choose */}
+      <section style={{ padding: '80px 20px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <h2 style={{ textAlign: 'center', fontSize: '2.2em', fontWeight: 600, marginBottom: '20px', color: '#2c3e50' }}>Why Choose Our Bookmark Builder?</h2>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '32px' }}>
+            <div style={{ textAlign: 'center', padding: '30px', borderRadius: '12px', background: 'white', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.06)' }}>
+              <span style={{ fontSize: '2.8em', marginBottom: '12px', display: 'block' }}>🚀</span>
+              <h3 style={{ fontSize: '1.2em', marginBottom: '10px', color: '#2c3e50' }}>No Coding Required</h3>
+              <p style={{ color: '#666', lineHeight: 1.6 }}>Simple form-based builder. Just fill in your links and descriptions — we handle the rest!</p>
+            </div>
+
+            <div style={{ textAlign: 'center', padding: '30px', borderRadius: '12px', background: 'white', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.06)' }}>
+              <span style={{ fontSize: '2.8em', marginBottom: '12px', display: 'block' }}>🎨</span>
+              <h3 style={{ fontSize: '1.2em', marginBottom: '10px', color: '#2c3e50' }}>4 Professional Themes</h3>
+              <p style={{ color: '#666', lineHeight: 1.6 }}>Corporate Blue, Executive Dark, Minimalist White, and Sunset Gradient themes included.</p>
+            </div>
+
+            <div style={{ textAlign: 'center', padding: '30px', borderRadius: '12px', background: 'white', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.06)' }}>
+              <span style={{ fontSize: '2.8em', marginBottom: '12px', display: 'block' }}>📱</span>
+              <h3 style={{ fontSize: '1.2em', marginBottom: '10px', color: '#2c3e50' }}>Mobile Responsive</h3>
+              <p style={{ color: '#666', lineHeight: 1.6 }}>Your bookmark pages look perfect on desktop, tablet, and mobile devices.</p>
+            </div>
+
+            <div style={{ textAlign: 'center', padding: '30px', borderRadius: '12px', background: 'white', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.06)' }}>
+              <span style={{ fontSize: '2.8em', marginBottom: '12px', display: 'block' }}>🔍</span>
+              <h3 style={{ fontSize: '1.2em', marginBottom: '10px', color: '#2c3e50' }}>Built-in Search</h3>
+              <p style={{ color: '#666', lineHeight: 1.6 }}>Find your bookmarks instantly with the integrated search functionality.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section style={{ padding: '48px 20px', textAlign: 'center' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <h3 style={{ fontSize: '1.6em', marginBottom: '12px' }}>Ready to create your first page?</h3>
+          <a href="https://buy.stripe.com/7sY8wPfd5dsgbNOeIebEA00" target="_blank" rel="noreferrer" onMouseDown={() => playClickSound()} style={{ padding: '14px 32px', borderRadius: 12, background: '#06b6d4', color: 'white', textDecoration: 'none', fontWeight: 700, boxShadow: '0 12px 36px rgba(0,0,0,0.08)' }}>Get Started Now — $29</a>
+        </div>
+      </section>
+    </div>
+  );
+}
