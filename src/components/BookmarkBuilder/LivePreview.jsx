@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const LivePreview = ({ pageTitle, categories, selectedTheme, themes, getCategoryHeaderColor, getLinkBackgroundColor, getLinkTextColor, getLinkBorderColor, openCredentialsForLink, openAddCreds }) => {
   return (
@@ -14,15 +15,10 @@ const LivePreview = ({ pageTitle, categories, selectedTheme, themes, getCategory
       }}>
         <div style={{ textAlign: 'center', marginBottom: '20px' }}>
           <h3 style={{ fontSize: '1.5em', marginBottom: '10px' }}>{pageTitle}</h3>
-          <div style={{
-            background: 'rgba(255,255,255,0.9)',
-            color: '#333',
-            padding: '8px 15px',
-            borderRadius: '20px',
-            fontSize: '0.9em',
-            display: 'inline-block'
-          }}>
-            🔍 Search your bookmarks...
+          {/* Widgets (search, featured, text) */}
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', marginTop: 8 }}>
+            {/* simple demo: show a search box and any text/featured widgets */}
+            <input placeholder="🔍 Search your bookmarks..." style={{ padding: '8px 12px', borderRadius: 20, border: '1px solid #e6eefc', minWidth: 240 }} />
           </div>
         </div>
 
@@ -70,3 +66,17 @@ const LivePreview = ({ pageTitle, categories, selectedTheme, themes, getCategory
 };
 
 export default LivePreview;
+
+LivePreview.propTypes = {
+  pageTitle: PropTypes.string,
+  categories: PropTypes.array,
+  selectedTheme: PropTypes.string,
+  themes: PropTypes.object,
+  getCategoryHeaderColor: PropTypes.func,
+  getLinkBackgroundColor: PropTypes.func,
+  getLinkTextColor: PropTypes.func,
+  getLinkBorderColor: PropTypes.func,
+  openCredentialsForLink: PropTypes.func,
+  openAddCreds: PropTypes.func,
+  widgets: PropTypes.array
+};

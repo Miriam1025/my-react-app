@@ -24,6 +24,7 @@ function BookmarkBuilder() {
   const [activeCredentials, setActiveCredentials] = useState(null);
   const [activeLinkUrl, setActiveLinkUrl] = useState(null);
   const [showAddCredModalFor, setShowAddCredModalFor] = useState(null);
+  const [widgets, setWidgets] = useState([]);
 
   const themes = {
     corporate: {
@@ -54,6 +55,18 @@ function BookmarkBuilder() {
       name: 'New Category',
       links: []
     }]);
+  };
+
+  const addWidget = () => {
+    setWidgets([...widgets, { id: Date.now() + Math.random(), type: 'search', label: '' }]);
+  };
+
+  const removeWidget = (id) => {
+    setWidgets(widgets.filter(w => w.id !== id));
+  };
+
+  const updateWidget = (id, newWidget) => {
+    setWidgets(widgets.map(w => w.id === id ? newWidget : w));
   };
 
   const addLink = (categoryId) => {
@@ -270,13 +283,11 @@ function BookmarkBuilder() {
     <div class="container">
         <div class="header">
             <h1>${pageTitle}</h1>
-            <input 
-                type="text" 
-                id="searchInput" 
-                class="search-box" 
-                placeholder="Search your bookmarks..." 
-                onkeyup="searchLinks()"
-            >
+      ${widgets.map(w => {
+        if (w.type === 'search') return `<input type="text" id="searchInput" class="search-box" placeholder="${(w.label || 'Search your bookmarks...')}" onkeyup="searchLinks()">`;
+        if (w.type === 'featured') return `<div style="margin-top:12px;"><a href="#" class="link featured">${(w.label || 'Featured Link')}</a></div>`;
+        return `<div style="margin-top:12px; font-size:0.95em; color:#333;">${(w.label || '')}</div>`;
+      }).join('')}
         </div>
         
         <div class="categories">
@@ -335,7 +346,7 @@ function BookmarkBuilder() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '40px' }}>
           
           <div style={{ background: 'white', borderRadius: '15px', padding: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
-            <PageSettings pageTitle={pageTitle} setPageTitle={setPageTitle} selectedTheme={selectedTheme} setSelectedTheme={setSelectedTheme} themes={themes} />
+            <PageSettings pageTitle={pageTitle} setPageTitle={setPageTitle} selectedTheme={selectedTheme} setSelectedTheme={setSelectedTheme} themes={themes} widgets={widgets} addWidget={addWidget} removeWidget={removeWidget} updateWidget={updateWidget} />
             <div style={{ marginTop: 12 }}>
               <CategoriesEditor
                 categories={categories}
@@ -385,6 +396,7 @@ function BookmarkBuilder() {
             getLinkBorderColor={getLinkBorderColor}
             openCredentialsForLink={openCredentialsForLink}
             openAddCreds={openAddCreds}
+            widgets={widgets}
           />
         </div>
       </div>

@@ -39,8 +39,8 @@ export default function SalesPage() {
 
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 22 }}>
             <a
-              href="/examples#student"
-              onMouseDown={() => playClickSound()}
+              href="/examples/student"
+              onClick={(e) => { e.preventDefault(); playClickSound(); setTimeout(() => window.location.href = '/examples/student', 140); }}
               className="sales-persona"
               style={personaStyle('#184e8b', '#fff')}
             >
@@ -48,8 +48,8 @@ export default function SalesPage() {
             </a>
 
             <a
-              href="/examples#freelancer"
-              onMouseDown={() => playClickSound()}
+              href="/examples/freelancer"
+              onClick={(e) => { e.preventDefault(); playClickSound(); setTimeout(() => window.location.href = '/examples/freelancer', 140); }}
               className="sales-persona"
               style={personaStyle('#0f172a', '#fff')}
             >
@@ -57,17 +57,17 @@ export default function SalesPage() {
             </a>
 
             <a
-              href="/examples#designer"
-              onMouseDown={() => playClickSound()}
+              href="/examples/designer"
+              onClick={(e) => { e.preventDefault(); playClickSound(); setTimeout(() => window.location.href = '/examples/designer', 140); }}
               className="sales-persona"
-              style={personaStyle('linear-gradient(180deg,#7a6ce0,#f7d9fb)')}
+              style={personaStyle('linear-gradient(180deg,#5b44d8 0%, #4a2fa0 100%)')}
             >
               🎨 Designer Inspiration
             </a>
 
             <a
-              href="/examples#family"
-              onMouseDown={() => playClickSound()}
+              href="/examples/family"
+              onClick={(e) => { e.preventDefault(); playClickSound(); setTimeout(() => window.location.href = '/examples/family', 140); }}
               className="sales-persona"
               style={personaStyle('#0b5e43', '#fff')}
             >
