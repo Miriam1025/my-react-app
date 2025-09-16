@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import CredentialsPopup from './CredentialsPopup';
-import { saveCredentialsForUrl } from './CredentialsPopup/utils/credentialsUtils';
+import AddCredentialsModal from './CredentialsPopup/AddCredentialsModal';
+import PageSettings from './BookmarkBuilder/PageSettings';
+import CategoriesEditor from './BookmarkBuilder/CategoriesEditor';
+import LivePreview from './BookmarkBuilder/LivePreview';
 
 function BookmarkBuilder() {
   const [selectedTheme, setSelectedTheme] = useState('corporate');
@@ -20,10 +23,7 @@ function BookmarkBuilder() {
   const [isCredPopupOpen, setIsCredPopupOpen] = useState(false);
   const [activeCredentials, setActiveCredentials] = useState(null);
   const [activeLinkUrl, setActiveLinkUrl] = useState(null);
-  const [showAddCredFormFor, setShowAddCredFormFor] = useState(null);
-  const [newCreds, setNewCreds] = useState({ username: '', password: '', notes: '' });
-  const [pinForSave, setPinForSave] = useState('');
-  const [saveError, setSaveError] = useState(null);
+  const [showAddCredModalFor, setShowAddCredModalFor] = useState(null);
 
   const themes = {
     corporate: {
@@ -99,26 +99,12 @@ function BookmarkBuilder() {
   };
 
   const openAddCreds = (link) => {
-    setShowAddCredFormFor(link.id);
-    setNewCreds({ username: '', password: '', notes: '' });
-    setPinForSave('');
-    setSaveError(null);
+    setShowAddCredModalFor(link);
   };
 
-  const handleSaveCredentials = async (link) => {
-    if (!pinForSave || pinForSave.length !== 4) {
-      setSaveError('Enter a 4-digit PIN used to encrypt credentials');
-      return;
-    }
-
-    try {
-      await saveCredentialsForUrl(link.url, newCreds, pinForSave);
-      setShowAddCredFormFor(null);
-      setSaveError(null);
-    } catch (e) {
-      console.error('save credentials error', e);
-      setSaveError('Failed to save credentials');
-    }
+  const handleSaveCredentials = async () => {
+    // The modal's form handles saving; this placeholder can be used for callbacks
+    setShowAddCredModalFor(null);
   };
 
   const closeCredPopup = () => {
@@ -348,263 +334,68 @@ function BookmarkBuilder() {
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '40px' }}>
           
-          {/* Builder Panel */}
           <div style={{ background: 'white', borderRadius: '15px', padding: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
-            <h2 style={{ marginBottom: '30px', color: '#2c3e50' }}>Build Your Page</h2>
-            
-            {/* Page Title */}
-            <div style={{ marginBottom: '30px' }}>
-              <label htmlFor="pageTitle" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#333' }}>Page Title:</label>
-              <input
-                id="pageTitle"
-                type="text"
-                value={pageTitle}
-                onChange={(e) => setPageTitle(e.target.value)}
-                style={{ width: '100%', padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
-                placeholder="My Awesome Bookmarks"
+            <PageSettings pageTitle={pageTitle} setPageTitle={setPageTitle} selectedTheme={selectedTheme} setSelectedTheme={setSelectedTheme} themes={themes} />
+            <div style={{ marginTop: 12 }}>
+              <CategoriesEditor
+                categories={categories}
+                addCategory={addCategory}
+                addLink={addLink}
+                updateCategory={updateCategory}
+                updateLink={updateLink}
+                deleteCategory={deleteCategory}
+                deleteLink={deleteLink}
+                openAddCreds={openAddCreds}
+                openCredentialsForLink={openCredentialsForLink}
               />
             </div>
-
-            {/* Theme Selection */}
-            <div style={{ marginBottom: '30px' }}>
-              <div style={{ display: 'block', marginBottom: '15px', fontWeight: 600, color: '#333' }}>Choose Theme:</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                {Object.entries(themes).map(([key, theme]) => (
-                  <button
-                    key={key}
-                    onClick={() => setSelectedTheme(key)}
-                    style={{
-                      padding: '15px',
-                      border: selectedTheme === key ? '3px solid #667eea' : '2px solid #e0e0e0',
-                      borderRadius: '10px',
-                      background: theme.gradient,
-                      color: key === 'minimal' ? '#333' : 'white',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                    }}
-                  >
-                    {theme.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Categories */}
-            <div style={{ marginBottom: '30px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <div style={{ fontWeight: 600, color: '#333' }}>Categories & Links:</div>
-                <button
-                  onClick={addCategory}
-                  style={{ background: '#4ade80', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' }}
-                >
-                  + Add Category
-                </button>
-              </div>
-
-              {categories.map((category) => (
-                <div key={category.id} style={{ border: '2px solid #e0e0e0', borderRadius: '10px', padding: '20px', marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
-                    <label htmlFor={`category-${category.id}`} className="sr-only">Category Name</label>
-                    <input
-                      id={`category-${category.id}`}
-                      type="text"
-                      value={category.name}
-                      onChange={(e) => updateCategory(category.id, e.target.value)}
-                      style={{ flex: 1, padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
-                      placeholder="Category Name"
-                    />
-                    <button
-                      onClick={() => addLink(category.id)}
-                      style={{ background: '#667eea', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '4px', cursor: 'pointer' }}
-                    >
-                      + Link
-                    </button>
-                    {categories.length > 1 && (
-                      <button
-                        onClick={() => deleteCategory(category.id)}
-                        style={{ background: '#ef4444', color: 'white', border: 'none', padding: '8px 12px', borderRadius: '4px', cursor: 'pointer' }}
-                      >
-                        Delete
-                      </button>
-                    )}
-                  </div>
-
-                  {category.links.map((link) => (
-                    <div key={link.id} style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
-                      <label htmlFor={`link-name-${link.id}`} className="sr-only">Link Name</label>
-                      <input
-                        id={`link-name-${link.id}`}
-                        type="text"
-                        placeholder="Link Name"
-                        value={link.name}
-                        onChange={(e) => updateLink(category.id, link.id, 'name', e.target.value)}
-                        style={{ flex: 1, padding: '6px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.9em' }}
-                      />
-                      <label htmlFor={`link-url-${link.id}`} className="sr-only">Link URL</label>
-                      <input
-                        id={`link-url-${link.id}`}
-                        type="url"
-                        placeholder="https://example.com"
-                        value={link.url}
-                        onChange={(e) => updateLink(category.id, link.id, 'url', e.target.value)}
-                        style={{ flex: 2, padding: '6px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.9em' }}
-                      />
-                      <button
-                        onClick={() => deleteLink(category.id, link.id)}
-                        style={{ background: '#ef4444', color: 'white', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8em' }}
-                      >
-                        ×
-                      </button>
-                      <button
-                        onClick={() => openCredentialsForLink(link)}
-                        style={{ background: '#0ea5a4', color: 'white', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8em' }}
-                        title="View stored credentials (demo)"
-                      >
-                        🔒
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-
-            {/* Generate Button */}
-            <button
-              onClick={generateHTML}
-              style={{
-                width: '100%',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                color: 'white',
-                border: 'none',
-                padding: '15px',
-                borderRadius: '10px',
-                fontSize: '1.1em',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'transform 0.3s ease'
-              }}
-              onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
-              onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
-              onFocus={(e) => e.target.style.transform = 'translateY(-2px)'}
-              onBlur={(e) => e.target.style.transform = 'translateY(0)'}
-            >
-              📥 Download Your Bookmark Page
-            </button>
-
-            {/* Instructions */}
-            <div style={{ marginTop: '20px', padding: '15px', background: '#f0f9ff', borderRadius: '8px', border: '1px solid #e0f2fe' }}>
-              <h3 style={{ fontSize: '1em', marginBottom: '10px', color: '#0369a1' }}>How to use your bookmark page:</h3>
-              <ol style={{ fontSize: '0.9em', color: '#374151', lineHeight: 1.6, paddingLeft: '20px' }}>
-                <li>Click "Download Your Bookmark Page" above</li>
-                <li>Find the downloaded HTML file (usually in Downloads folder)</li>
-                <li>Double-click the file to open it in your browser</li>
-                <li>Bookmark the page in your browser for easy access</li>
-                <li>Enjoy your organized, beautiful bookmark page!</li>
-              </ol>
+            <div style={{ marginTop: 12 }}>
+              <button
+                onClick={generateHTML}
+                style={{
+                  width: '100%',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  color: 'white',
+                  border: 'none',
+                  padding: '15px',
+                  borderRadius: '10px',
+                  fontSize: '1.1em',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'transform 0.3s ease'
+                }}
+                onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
+                onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+                onFocus={(e) => e.target.style.transform = 'translateY(-2px)'}
+                onBlur={(e) => e.target.style.transform = 'translateY(0)'}
+              >
+                📥 Download Your Bookmark Page
+              </button>
             </div>
           </div>
 
-          {/* Preview Panel */}
-          <div style={{ background: 'white', borderRadius: '15px', padding: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
-            <h2 style={{ marginBottom: '20px', color: '#2c3e50' }}>Live Preview</h2>
-            <div style={{
-              backgroundImage: themes[selectedTheme].gradient,
-              color: themes[selectedTheme].colors.text,
-              borderRadius: '10px',
-              padding: '20px',
-              minHeight: '500px',
-              overflow: 'hidden'
-            }}>
-              <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-                <h3 style={{ fontSize: '1.5em', marginBottom: '10px' }}>{pageTitle}</h3>
-                <div style={{
-                  background: 'rgba(255,255,255,0.9)',
-                  color: '#333',
-                  padding: '8px 15px',
-                  borderRadius: '20px',
-                  fontSize: '0.9em',
-                  display: 'inline-block'
-                }}>
-                  🔍 Search your bookmarks...
-                </div>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
-                {categories.map((category) => (
-                  <div key={category.id} style={{
-                    background: selectedTheme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.9)',
-                    borderRadius: '8px',
-                    padding: '15px'
-                  }}>
-                    <h4 style={{
-                      marginBottom: '10px',
-                      color: getCategoryHeaderColor(selectedTheme),
-                      fontSize: '1em'
-                    }}>
-                      {category.name}
-                    </h4>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      {category.links.slice(0, 4).map((link) => (
-                        <div key={link.id} style={{
-                          background: getLinkBackgroundColor(selectedTheme),
-                          color: getLinkTextColor(selectedTheme),
-                          padding: '6px 10px',
-                          borderRadius: '4px',
-                          borderLeft: `3px solid ${getLinkBorderColor(selectedTheme)}`,
-                          fontSize: '0.8em'
-                        }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <span>{link.name}</span>
-                            <div>
-                              <button
-                                onClick={() => openCredentialsForLink(link)}
-                                style={{ background: 'transparent', border: 'none', color: getLinkTextColor(selectedTheme), cursor: 'pointer', fontSize: '0.9em' }}
-                                title="View credentials"
-                              >
-                                🔒
-                              </button>
-                              <button
-                                onClick={() => openAddCreds(link)}
-                                style={{ background: 'transparent', border: 'none', color: getLinkTextColor(selectedTheme), cursor: 'pointer', fontSize: '0.9em', marginLeft: '6px' }}
-                                title="Add credentials for this link"
-                              >
-                                ➕
-                              </button>
-                            </div>
-                          </div>
-
-                          {showAddCredFormFor === link.id && (
-                            <div style={{ marginTop: '8px', padding: '8px', background: 'rgba(0,0,0,0.03)', borderRadius: '6px' }}>
-                              <input placeholder="username" value={newCreds.username} onChange={(e) => setNewCreds({...newCreds, username: e.target.value})} style={{ width: '100%', marginBottom: '6px', padding: '6px' }} />
-                              <input placeholder="password" value={newCreds.password} onChange={(e) => setNewCreds({...newCreds, password: e.target.value})} style={{ width: '100%', marginBottom: '6px', padding: '6px' }} />
-                              <input placeholder="notes" value={newCreds.notes} onChange={(e) => setNewCreds({...newCreds, notes: e.target.value})} style={{ width: '100%', marginBottom: '6px', padding: '6px' }} />
-                              <input placeholder="4-digit PIN" value={pinForSave} onChange={(e) => setPinForSave(e.target.value.replace(/\D/g, '').slice(0,4))} style={{ width: '100%', marginBottom: '6px', padding: '6px' }} />
-                              <div style={{ display: 'flex', gap: '8px' }}>
-                                <button onClick={() => handleSaveCredentials(link)} style={{ background: '#10b981', color: 'white', padding: '8px 10px', borderRadius: '6px', border: 'none' }}>Save</button>
-                                <button onClick={() => setShowAddCredFormFor(null)} style={{ background: '#ef4444', color: 'white', padding: '8px 10px', borderRadius: '6px', border: 'none' }}>Cancel</button>
-                              </div>
-                              {saveError && <div style={{ color: 'red', marginTop: '6px' }}>{saveError}</div>}
-                            </div>
-                          )}
-                        </div>
-                      ))}
-
-                      {category.links.length > 4 && (
-                        <div style={{ fontSize: '0.7em', opacity: 0.7, textAlign: 'center' }}>
-                          +{category.links.length - 4} more
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <LivePreview
+            pageTitle={pageTitle}
+            categories={categories}
+            selectedTheme={selectedTheme}
+            themes={themes}
+            getCategoryHeaderColor={getCategoryHeaderColor}
+            getLinkBackgroundColor={getLinkBackgroundColor}
+            getLinkTextColor={getLinkTextColor}
+            getLinkBorderColor={getLinkBorderColor}
+            openCredentialsForLink={openCredentialsForLink}
+            openAddCreds={openAddCreds}
+          />
         </div>
       </div>
     </div>
     {/* Credentials popup — mounted so it shows after deployment when triggered */}
+    <AddCredentialsModal
+      isOpen={!!showAddCredModalFor}
+      onClose={() => setShowAddCredModalFor(null)}
+      onSave={handleSaveCredentials}
+      defaultUrl={showAddCredModalFor ? showAddCredModalFor.url : ''}
+    />
     <CredentialsPopup
       isOpen={isCredPopupOpen}
       onClose={closeCredPopup}
