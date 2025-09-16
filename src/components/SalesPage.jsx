@@ -25,10 +25,11 @@ export default function SalesPage() {
       {/* Hero */}
       <section style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', padding: '80px 20px', textAlign: 'center' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <h1 style={{ fontSize: '3em', fontWeight: 700, marginBottom: '16px', lineHeight: 1.15 }}>Your personal start page for bookmarks</h1>
+          <h1 style={{ fontSize: '3em', fontWeight: 700, marginBottom: '16px', lineHeight: 1.15 }}>Create Beautiful Personalized Bookmark Pages in Minutes</h1>
           <p style={{ fontSize: '1.1em', marginBottom: '12px', opacity: 0.95 }}>Build a private, beautiful home page to organize and launch your favorite sites — no code required.</p>
           <div style={{ fontSize: '1.4em', fontWeight: 700, margin: '6px 0' }}>$29</div>
           <div style={{ opacity: 0.9, fontSize: '0.95em', marginBottom: '8px' }}>One-time purchase • Instant download</div>
+          <div style={{ opacity: 0.9, fontSize: '0.95em', marginBottom: '8px' }}>Endless Possibilities</div>
         </div>
       </section>
 
@@ -85,7 +86,7 @@ export default function SalesPage() {
           </div>
 
           {/* CTA under examples */}
-          <div style={{ marginTop: 18 }}>
+          <div style={{ marginTop: 30 }}>
             <a
               href="https://buy.stripe.com/7sY8wPfd5dsgbNOeIebEA00"
               target="_blank"

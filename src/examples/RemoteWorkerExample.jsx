@@ -7,9 +7,10 @@ const AVAILABLE_ZONES = [
 
 function formatTZ(date, tz) {
   try {
-    return new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false, timeZone: tz }).format(date);
+    // 12-hour format without seconds (e.g. "8:00 PM")
+    return new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: tz }).format(date);
   } catch {
-    return date.toLocaleTimeString();
+    return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
   }
 }
 
@@ -39,9 +40,7 @@ export default function RemoteWorkerExample() {
     }
   }, [zones]);
 
-  const updateZone = (index, tz) => {
-    setZones(z => z.map((zv, i) => i === index ? tz : zv));
-  };
+  // zone configuration happens in the builder; dashboard displays persisted zones only
 
   return (
     <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', padding: 24 }}>
@@ -50,12 +49,9 @@ export default function RemoteWorkerExample() {
       <p style={{ color: '#666', marginBottom: 18 }}>Three clocks for different time zones. Choose zones and they persist for your browser.</p>
 
       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginBottom: 18 }}>
-        {zones.map((tz, idx) => (
+        {zones.map((tz) => (
           <div key={tz} style={{ minWidth: 200, padding: 16, borderRadius: 12, background: 'white', boxShadow: '0 8px 24px rgba(0,0,0,0.08)' }}>
-            <div style={{ fontSize: '0.9em', color: '#666', marginBottom: 8 }}>Zone</div>
-            <select value={tz} onChange={(e) => updateZone(idx, e.target.value)} style={{ width: '100%', padding: 8, borderRadius: 8, marginBottom: 12 }}>
-              {AVAILABLE_ZONES.map(z => <option key={z} value={z}>{z}</option>)}
-            </select>
+            {/* Zone selection is configured in the builder; dashboard shows clocks only */}
             <div style={{ fontSize: '2em', fontWeight: 700, textAlign: 'center' }}>{formatTZ(now, tz)}</div>
             <div style={{ textAlign: 'center', marginTop: 8, color: '#444' }}>{tz}</div>
           </div>
