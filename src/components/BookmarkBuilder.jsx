@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import CredentialsPopup from './CredentialsPopup';
+import { saveCredentialsForUrl } from './CredentialsPopup/utils/credentialsUtils';
 
 function BookmarkBuilder() {
   const [selectedTheme, setSelectedTheme] = useState('corporate');
@@ -13,6 +15,15 @@ function BookmarkBuilder() {
       ]
     }
   ]);
+
+  // Credentials popup state (local demo integration)
+  const [isCredPopupOpen, setIsCredPopupOpen] = useState(false);
+  const [activeCredentials, setActiveCredentials] = useState(null);
+  const [activeLinkUrl, setActiveLinkUrl] = useState(null);
+  const [showAddCredFormFor, setShowAddCredFormFor] = useState(null);
+  const [newCreds, setNewCreds] = useState({ username: '', password: '', notes: '' });
+  const [pinForSave, setPinForSave] = useState('');
+  const [saveError, setSaveError] = useState(null);
 
   const themes = {
     corporate: {
@@ -78,6 +89,42 @@ function BookmarkBuilder() {
         ? { ...cat, links: cat.links.filter((link) => link.id !== linkId) }
         : cat
     ));
+  };
+
+  const openCredentialsForLink = (link) => {
+    // Do not store demo credentials in code: just open popup and let it attempt to load encrypted credentials for the URL on PIN entry.
+    setActiveCredentials(null);
+    setActiveLinkUrl(link.url);
+    setIsCredPopupOpen(true);
+  };
+
+  const openAddCreds = (link) => {
+    setShowAddCredFormFor(link.id);
+    setNewCreds({ username: '', password: '', notes: '' });
+    setPinForSave('');
+    setSaveError(null);
+  };
+
+  const handleSaveCredentials = async (link) => {
+    if (!pinForSave || pinForSave.length !== 4) {
+      setSaveError('Enter a 4-digit PIN used to encrypt credentials');
+      return;
+    }
+
+    try {
+      await saveCredentialsForUrl(link.url, newCreds, pinForSave);
+      setShowAddCredFormFor(null);
+      setSaveError(null);
+    } catch (e) {
+      console.error('save credentials error', e);
+      setSaveError('Failed to save credentials');
+    }
+  };
+
+  const closeCredPopup = () => {
+    setIsCredPopupOpen(false);
+    setActiveCredentials(null);
+    setActiveLinkUrl(null);
   };
 
   const deleteCategory = (categoryId) => {
@@ -278,6 +325,7 @@ function BookmarkBuilder() {
   };
 
   return (
+    <>
     <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', minHeight: '100vh', background: '#f5f5f5' }}>
       {/* Welcome Message */}
       <div style={{ 
@@ -408,6 +456,13 @@ function BookmarkBuilder() {
                       >
                         ×
                       </button>
+                      <button
+                        onClick={() => openCredentialsForLink(link)}
+                        style={{ background: '#0ea5a4', color: 'white', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8em' }}
+                        title="View stored credentials (demo)"
+                      >
+                        🔒
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -499,9 +554,42 @@ function BookmarkBuilder() {
                           borderLeft: `3px solid ${getLinkBorderColor(selectedTheme)}`,
                           fontSize: '0.8em'
                         }}>
-                          {link.name}
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span>{link.name}</span>
+                            <div>
+                              <button
+                                onClick={() => openCredentialsForLink(link)}
+                                style={{ background: 'transparent', border: 'none', color: getLinkTextColor(selectedTheme), cursor: 'pointer', fontSize: '0.9em' }}
+                                title="View credentials"
+                              >
+                                🔒
+                              </button>
+                              <button
+                                onClick={() => openAddCreds(link)}
+                                style={{ background: 'transparent', border: 'none', color: getLinkTextColor(selectedTheme), cursor: 'pointer', fontSize: '0.9em', marginLeft: '6px' }}
+                                title="Add credentials for this link"
+                              >
+                                ➕
+                              </button>
+                            </div>
+                          </div>
+
+                          {showAddCredFormFor === link.id && (
+                            <div style={{ marginTop: '8px', padding: '8px', background: 'rgba(0,0,0,0.03)', borderRadius: '6px' }}>
+                              <input placeholder="username" value={newCreds.username} onChange={(e) => setNewCreds({...newCreds, username: e.target.value})} style={{ width: '100%', marginBottom: '6px', padding: '6px' }} />
+                              <input placeholder="password" value={newCreds.password} onChange={(e) => setNewCreds({...newCreds, password: e.target.value})} style={{ width: '100%', marginBottom: '6px', padding: '6px' }} />
+                              <input placeholder="notes" value={newCreds.notes} onChange={(e) => setNewCreds({...newCreds, notes: e.target.value})} style={{ width: '100%', marginBottom: '6px', padding: '6px' }} />
+                              <input placeholder="4-digit PIN" value={pinForSave} onChange={(e) => setPinForSave(e.target.value.replace(/\D/g, '').slice(0,4))} style={{ width: '100%', marginBottom: '6px', padding: '6px' }} />
+                              <div style={{ display: 'flex', gap: '8px' }}>
+                                <button onClick={() => handleSaveCredentials(link)} style={{ background: '#10b981', color: 'white', padding: '8px 10px', borderRadius: '6px', border: 'none' }}>Save</button>
+                                <button onClick={() => setShowAddCredFormFor(null)} style={{ background: '#ef4444', color: 'white', padding: '8px 10px', borderRadius: '6px', border: 'none' }}>Cancel</button>
+                              </div>
+                              {saveError && <div style={{ color: 'red', marginTop: '6px' }}>{saveError}</div>}
+                            </div>
+                          )}
                         </div>
                       ))}
+
                       {category.links.length > 4 && (
                         <div style={{ fontSize: '0.7em', opacity: 0.7, textAlign: 'center' }}>
                           +{category.links.length - 4} more
@@ -516,6 +604,14 @@ function BookmarkBuilder() {
         </div>
       </div>
     </div>
+    {/* Credentials popup — mounted so it shows after deployment when triggered */}
+    <CredentialsPopup
+      isOpen={isCredPopupOpen}
+      onClose={closeCredPopup}
+      linkUrl={activeLinkUrl}
+      credentials={activeCredentials || {}}
+    />
+    </>
   );
 }
 

@@ -22,7 +22,7 @@ export const useCredentialsSecurity = (credentials) => {
     };
   }, [credentials]);
 
-  const handlePinValidation = useCallback(async (pin) => {
+  const handlePinValidation = useCallback(async () => {
     // Here you could add additional security checks
     // For example, checking against a hashed PIN, rate limiting, etc.
     

@@ -30,4 +30,18 @@ export default [
       ],
     },
   },
+  // Allow Node globals in serverless function files (Netlify functions)
+  {
+    files: ['netlify/functions/**'],
+    languageOptions: {
+      globals: { ...globals.node, ...globals.commonjs },
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      // keep defaults but allow node-style exports/require for serverless functions
+    },
+  },
 ]

@@ -1,3 +1,4 @@
+/* eslint-env node */
 // Load .env variables when testing locally
 require('dotenv').config();
 

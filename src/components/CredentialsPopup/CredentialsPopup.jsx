@@ -4,7 +4,7 @@ import { PopupOverlay } from './PopupOverlay';
 import { PinInput } from './PinInput';
 import { CredentialsDisplay } from './CredentialsDisplay';
 import { useCredentialsSecurity } from './hooks/useCredentialsSecurity';
-import { validatePin } from './utils/credentialsUtils';
+import { validatePin, hasStoredPin, setPin, loadCredentialsForUrl } from './utils/credentialsUtils';
 import './CredentialsPopup.css';
 import PropTypes from 'prop-types';
 
@@ -12,19 +12,21 @@ const CredentialsPopup = ({
   isOpen, 
   onClose, 
   linkUrl, 
-  credentials,
-  masterPin = "1234" // You can make this configurable
+  credentials: initialCredentials
 }) => {
   const [pinEntered, setPinEntered] = useState(false);
   const [pinError, setPinError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [creatingPin, setCreatingPin] = useState(false);
+  const [hasPin, setHasPin] = useState(false);
+  const [storedCredentials, setStoredCredentials] = useState(null);
   
   const { 
     maskedCredentials, 
     showCredentials,
     handlePinValidation,
     resetSecurity 
-  } = useCredentialsSecurity(credentials);
+  } = useCredentialsSecurity(storedCredentials || initialCredentials);
 
   // Reset state when popup closes
   useEffect(() => {
@@ -34,6 +36,8 @@ const CredentialsPopup = ({
       setIsLoading(false);
       resetSecurity();
     }
+    // detect whether a pin is stored
+    setHasPin(hasStoredPin());
   }, [isOpen, resetSecurity]);
 
   const handlePinSubmit = async (enteredPin) => {
@@ -41,15 +45,30 @@ const CredentialsPopup = ({
     setPinError(false);
     
     try {
-      const isValid = await validatePin(enteredPin, masterPin);
-      
-      if (isValid) {
-        await handlePinValidation(enteredPin);
-        setPinEntered(true);
+      if (!hasPin) {
+        // Create a new PIN
+        await setPin(enteredPin);
+        setHasPin(true);
+        setCreatingPin(false);
+        // Optionally show a success message - for now reveal nothing until user re-opens
       } else {
-        setPinError(true);
-        // Clear error after 3 seconds
-        setTimeout(() => setPinError(false), 3000);
+        const isValid = await validatePin(enteredPin);
+        if (isValid) {
+          // Attempt to load encrypted credentials for this URL if present
+          try {
+            const loaded = await loadCredentialsForUrl(linkUrl, enteredPin);
+            if (loaded) setStoredCredentials(loaded);
+          } catch (e) {
+            // ignore decryption errors - fall back to provided initial credentials
+            console.warn('Could not decrypt stored credentials for url', e);
+          }
+
+          await handlePinValidation();
+          setPinEntered(true);
+        } else {
+          setPinError(true);
+          setTimeout(() => setPinError(false), 3000);
+        }
       }
     } catch (error) {
       console.error('Pin validation error:', error);
@@ -90,15 +109,35 @@ const CredentialsPopup = ({
           )}
 
           {!pinEntered ? (
-            <PinInput
-              onSubmit={handlePinSubmit}
-              hasError={pinError}
-              isLoading={isLoading}
-              errorMessage="Invalid PIN. Please try again."
-            />
+            <div>
+              {!hasPin && !creatingPin && (
+                <div style={{ marginBottom: '12px' }}>
+                  <div style={{ marginBottom: '8px', color: '#374151' }}>No PIN set. Create a 4-digit PIN to secure your credentials locally.</div>
+                  <button onClick={() => setCreatingPin(true)} style={{ background: '#667eea', color: 'white', padding: '8px 12px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>Create PIN</button>
+                </div>
+              )}
+
+              {creatingPin && (
+                <PinInput
+                  onSubmit={handlePinSubmit}
+                  hasError={pinError}
+                  isLoading={isLoading}
+                  errorMessage="Could not set PIN. Try again."
+                />
+              )}
+
+              {hasPin && (
+                <PinInput
+                  onSubmit={handlePinSubmit}
+                  hasError={pinError}
+                  isLoading={isLoading}
+                  errorMessage="Invalid PIN. Please try again."
+                />
+              )}
+            </div>
           ) : (
             <CredentialsDisplay
-              credentials={showCredentials ? credentials : maskedCredentials}
+              credentials={showCredentials ? (storedCredentials || initialCredentials) : maskedCredentials}
               isRevealed={showCredentials}
             />
           )}

@@ -2,12 +2,9 @@ import React from 'react';
 import BookmarkBuilder from './BookmarkBuilder';
 
 function SalesPage() {
-  // Testing override - remove before final deployment
+  // Testing override - show the builder only when ?test=true is present
   const isTestMode = window.location.search.includes('test=true');
-  
-  if (isTestMode) {
-    return <BookmarkBuilder />;
-  }
+  if (isTestMode) return <BookmarkBuilder />;
 
   const handleFaqClick = (e) => {
     const answer = e.target.nextElementSibling;
@@ -64,6 +61,7 @@ function SalesPage() {
           >
             Get Started Now
           </a>
+          {/* Keep marketing UI minimal — builder available via ?test=true */}
         </div>
       </section>
 
