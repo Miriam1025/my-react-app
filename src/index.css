@@ -29,6 +29,11 @@ body {
   min-height: 100vh;
 }
 
+/* Smooth in-page scrolling for anchor navigation */
+html {
+  scroll-behavior: smooth;
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;

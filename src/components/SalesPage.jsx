@@ -1,5 +1,6 @@
 import React from 'react';
 import BookmarkBuilder from './BookmarkBuilder';
+import { playClickSound } from '../utils/sound';
 
 function SalesPage() {
   // Testing override - show the builder only when ?test=true is present
@@ -22,18 +23,7 @@ function SalesPage() {
         padding: '100px 20px',
         textAlign: 'center'
       }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <img 
-            src="/logo_white_bg_refined.jpeg" 
-            alt="Timeless Links Logo" 
-            style={{ 
-              width: '120px', 
-              height: '120px', 
-              borderRadius: '50%', 
-              marginBottom: '30px',
-              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)'
-            }} 
-          />
+        <div style={{ marginBottom: '30px', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)' }}>
           <h1 style={{ fontSize: '3.5em', fontWeight: 700, marginBottom: '20px', lineHeight: 1.2 }}>
             Create Beautiful Bookmark Pages in Minutes
           </h1>
@@ -65,30 +55,92 @@ function SalesPage() {
         </div>
       </section>
 
-      {/* Examples Link Section */}
+      {/* Examples Link Section (4 Persona Quick-View Buttons) */}
       <section style={{ padding: '60px 20px', background: 'white' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-          <a 
-            href="/examples"
-            style={{
-              display: 'inline-block',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              color: 'white',
-              padding: '15px 30px',
-              borderRadius: '30px',
-              textDecoration: 'none',
-              fontSize: '1.1em',
-              fontWeight: '600',
-              boxShadow: '0 8px 25px rgba(102, 126, 234, 0.3)',
-              transition: 'transform 0.3s ease'
-            }}
-            onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
-            onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
-            onFocus={(e) => e.target.style.transform = 'translateY(-2px)'}
-            onBlur={(e) => e.target.style.transform = 'translateY(0)'}
-          >
-            👀 See Examples & Themes
-          </a>
+          <div style={{ marginBottom: 18, fontSize: '1.05em', color: '#444' }}>See our product in context — jump to a sample page tailored to your needs.</div>
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a
+              href="/examples#student"
+              onClick={(e) => { e.preventDefault(); playClickSound(); setTimeout(() => window.location.href = '/examples#student', 160); }}
+              style={{ padding: '12px 20px', borderRadius: 12, background: '#eef2ff', color: '#1e3c72', textDecoration: 'none', fontWeight: 700, boxShadow: '0 6px 18px rgba(102,126,234,0.08)' }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+            >
+              👩‍🎓 Student Study Hub
+            </a>
+
+            <a
+              href="/examples#freelancer"
+              onClick={(e) => { e.preventDefault(); playClickSound(); setTimeout(() => window.location.href = '/examples#freelancer', 160); }}
+              style={{
+                padding: '12px 20px',
+                borderRadius: 12,
+                background: 'linear-gradient(180deg,#0b1220 0%,#0f172a 100%)',
+                color: 'white',
+                textDecoration: 'none',
+                fontWeight: 700,
+                border: '1px solid rgba(255,255,255,0.04)',
+                boxShadow: '0 12px 0 rgba(2,6,23,0.12), 0 22px 36px rgba(2,6,23,0.06)',
+                transition: 'transform 120ms ease, box-shadow 120ms ease'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
+              onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 12px 0 rgba(2,6,23,0.12), 0 22px 36px rgba(2,6,23,0.06)'; }}
+              onMouseDown={(e) => { const el = e.currentTarget; el.dataset.origShadow = el.style.boxShadow; el.style.transform = 'translateY(2px)'; el.style.boxShadow = '0 6px 0 rgba(0,0,0,0.12), 0 12px 24px rgba(0,0,0,0.08)'; }}
+              onMouseUp={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = el.dataset.origShadow || ''; }}
+              onMouseLeave={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = el.dataset.origShadow || ''; }}
+            >
+              💼 Freelancer Dashboard
+            </a>
+
+            <a
+              href="/examples#designer"
+              onClick={(e) => { e.preventDefault(); playClickSound(); setTimeout(() => window.location.href = '/examples#designer', 160); }}
+              style={{
+                padding: '12px 20px',
+                borderRadius: 12,
+                background: 'linear-gradient(180deg,#f7d9fb 0%,#7a6ce0 100%)',
+                color: 'white',
+                textDecoration: 'none',
+                fontWeight: 700,
+                border: '1px solid rgba(255,255,255,0.12)',
+                boxShadow: '0 10px 0 rgba(118,75,162,0.08), 0 20px 36px rgba(118,75,162,0.06)',
+                transition: 'transform 120ms ease, box-shadow 120ms ease'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
+              onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 0 rgba(118,75,162,0.08), 0 20px 36px rgba(118,75,162,0.06)'; }}
+              onMouseDown={(e) => { const el = e.currentTarget; el.dataset.origShadow = el.style.boxShadow; el.style.transform = 'translateY(2px)'; el.style.boxShadow = '0 4px 0 rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.06)'; }}
+              onMouseUp={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = el.dataset.origShadow || ''; }}
+              onMouseLeave={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = el.dataset.origShadow || ''; }}
+            >
+              🎨 Designer Inspiration
+            </a>
+            <a
+              href="/examples#family"
+              onClick={(e) => { e.preventDefault(); playClickSound(); setTimeout(() => window.location.href = '/examples#family', 160); }}
+              style={{
+                padding: '12px 20px',
+                borderRadius: 12,
+                background: 'linear-gradient(180deg,#f0fff8 0%,#ecfdf5 100%)',
+                color: '#065f46',
+                textDecoration: 'none',
+                fontWeight: 700,
+                border: '1px solid rgba(6,95,70,0.06)',
+                boxShadow: '0 10px 0 rgba(6,95,70,0.06), 0 18px 32px rgba(6,95,70,0.04)',
+                transition: 'transform 120ms ease, box-shadow 120ms ease'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
+              onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 0 rgba(6,95,70,0.06), 0 18px 32px rgba(6,95,70,0.04)'; }}
+              onMouseDown={(e) => { const el = e.currentTarget; el.dataset.origShadow = el.style.boxShadow; el.style.transform = 'translateY(2px)'; el.style.boxShadow = '0 4px 0 rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.06)'; }}
+              onMouseUp={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = el.dataset.origShadow || ''; }}
+              onMouseLeave={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = el.dataset.origShadow || ''; }}
+            >
+              👨‍👩‍👧‍👦 Family Hub
+            </a>
+          </div>
+          <div style={{ marginTop: 12, fontSize: '0.9em', color: '#666' }}>
+            Each example opens a sample page. Click the "Return to Sales Page" button at the top of that example to come back here.
+          </div>
         </div>
       </section>
 

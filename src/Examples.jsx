@@ -1,4 +1,5 @@
 import React from 'react';
+import { playClickSound } from './utils/sound';
 
 function Examples() {
   return (
@@ -11,6 +12,12 @@ function Examples() {
         textAlign: 'center'
       }}>
         <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
+            <div style={{ textAlign: 'left' }}>
+              <a href="/" onClick={(e) => { e.preventDefault(); playClickSound(); setTimeout(() => window.location.href='/', 160); }} style={{ display: 'inline-block', background: 'rgba(255,255,255,0.12)', color: 'white', padding: '8px 14px', borderRadius: 10, textDecoration: 'none', fontWeight: 700 }}>← Return to Sales Page</a>
+            </div>
+            <div style={{ flex: 1 }} />
+          </div>
           <h1 style={{ fontSize: '3em', fontWeight: 700, marginBottom: '20px' }}>
             See It In Action
           </h1>
@@ -32,7 +39,7 @@ function Examples() {
           
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
             {/* Student Example */}
-            <div style={{ background: 'white', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)' }}>
+            <div id="student" style={{ background: 'white', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)' }}>
               <div style={{ height: '250px', position: 'relative', overflow: 'hidden' }}>
                 <div style={{
                   background: '#f8f9fa',
@@ -110,7 +117,7 @@ function Examples() {
             </div>
 
             {/* Business Example */}
-            <div style={{ background: 'white', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)' }}>
+            <div id="freelancer" style={{ background: 'white', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)' }}>
               <div style={{ height: '250px', position: 'relative', overflow: 'hidden' }}>
                 <div style={{
                   background: '#f8f9fa',
@@ -189,7 +196,7 @@ function Examples() {
             </div>
 
             {/* Creative Example */}
-            <div style={{ background: 'white', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)' }}>
+            <div id="designer" style={{ background: 'white', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)' }}>
               <div style={{ height: '250px', position: 'relative', overflow: 'hidden' }}>
                 <div style={{
                   background: '#f8f9fa',
@@ -268,7 +275,7 @@ function Examples() {
             </div>
 
             {/* Family Example */}
-            <div style={{ background: 'white', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)' }}>
+            <div id="family" style={{ background: 'white', borderRadius: '15px', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)' }}>
               <div style={{ height: '250px', position: 'relative', overflow: 'hidden' }}>
                 <div style={{
                   background: '#f8f9fa',
