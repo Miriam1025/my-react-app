@@ -8,8 +8,8 @@ function BookmarkBuilder() {
       id: 1,
       name: 'Work',
       links: [
-        { name: 'Gmail', url: 'https://gmail.com' },
-        { name: 'Calendar', url: 'https://calendar.google.com' }
+        { id: 1001, name: 'Gmail', url: 'https://gmail.com' },
+        { id: 1002, name: 'Calendar', url: 'https://calendar.google.com' }
       ]
     }
   ]);
@@ -48,7 +48,7 @@ function BookmarkBuilder() {
   const addLink = (categoryId) => {
     setCategories(categories.map(cat => 
       cat.id === categoryId 
-        ? { ...cat, links: [...cat.links, { name: 'New Link', url: 'https://' }] }
+        ? { ...cat, links: [...cat.links, { id: Date.now() + Math.random(), name: 'New Link', url: 'https://' }] }
         : cat
     ));
   };
@@ -59,29 +59,51 @@ function BookmarkBuilder() {
     ));
   };
 
-  const updateLink = (categoryId, linkIndex, field, value) => {
+  const updateLink = (categoryId, linkId, field, value) => {
     setCategories(categories.map(cat => 
       cat.id === categoryId 
         ? {
             ...cat, 
-            links: cat.links.map((link, index) => 
-              index === linkIndex ? { ...link, [field]: value } : link
+            links: cat.links.map((link) => 
+              link.id === linkId ? { ...link, [field]: value } : link
             )
           }
         : cat
     ));
   };
 
-  const deleteLink = (categoryId, linkIndex) => {
+  const deleteLink = (categoryId, linkId) => {
     setCategories(categories.map(cat => 
       cat.id === categoryId 
-        ? { ...cat, links: cat.links.filter((_, index) => index !== linkIndex) }
+        ? { ...cat, links: cat.links.filter((link) => link.id !== linkId) }
         : cat
     ));
   };
 
   const deleteCategory = (categoryId) => {
     setCategories(categories.filter(cat => cat.id !== categoryId));
+  };
+
+  const getCategoryHeaderColor = (theme) => {
+    if (theme === 'minimal') return '#333';
+    if (theme === 'dark') return '#fbbf24';
+    return themes[theme].colors.primary;
+  };
+
+  const getLinkBackgroundColor = (theme) => {
+    return theme === 'dark' ? 'rgba(51, 65, 85, 0.8)' : 'rgba(255, 255, 255, 0.7)';
+  };
+
+  const getLinkTextColor = (theme) => {
+    return (theme === 'minimal' || theme === 'corporate') ? '#333' : '#fff';
+  };
+
+  const getLinkHoverColor = (theme) => {
+    return theme === 'dark' ? 'rgba(51, 65, 85, 1)' : 'rgba(255, 255, 255, 1)';
+  };
+
+  const getLinkBorderColor = (theme) => {
+    return theme === 'dark' ? '#fbbf24' : themes[theme].colors.primary;
   };
 
   const generateHTML = () => {
@@ -154,7 +176,7 @@ function BookmarkBuilder() {
         .category h2 {
             font-size: 1.3em;
             margin-bottom: 20px;
-            color: ${selectedTheme === 'minimal' ? '#333' : selectedTheme === 'dark' ? '#fbbf24' : theme.colors.primary};
+            color: ${getCategoryHeaderColor(selectedTheme)};
         }
         
         .links {
@@ -166,17 +188,17 @@ function BookmarkBuilder() {
         .link {
             display: block;
             padding: 12px 16px;
-            background: ${selectedTheme === 'dark' ? 'rgba(51, 65, 85, 0.8)' : 'rgba(255, 255, 255, 0.7)'};
-            color: ${selectedTheme === 'minimal' || selectedTheme === 'corporate' ? '#333' : '#fff'};
+            background: ${getLinkBackgroundColor(selectedTheme)};
+            color: ${getLinkTextColor(selectedTheme)};
             text-decoration: none;
             border-radius: 8px;
-            border-left: 4px solid ${selectedTheme === 'dark' ? '#fbbf24' : theme.colors.primary};
+            border-left: 4px solid ${getLinkBorderColor(selectedTheme)};
             transition: all 0.3s ease;
         }
         
         .link:hover {
             transform: translateX(5px);
-            background: ${selectedTheme === 'dark' ? 'rgba(51, 65, 85, 1)' : 'rgba(255, 255, 255, 1)'};
+            background: ${getLinkHoverColor(selectedTheme)};
         }
         
         .footer {
@@ -284,8 +306,9 @@ function BookmarkBuilder() {
             
             {/* Page Title */}
             <div style={{ marginBottom: '30px' }}>
-              <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#333' }}>Page Title:</label>
+              <label htmlFor="pageTitle" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#333' }}>Page Title:</label>
               <input
+                id="pageTitle"
                 type="text"
                 value={pageTitle}
                 onChange={(e) => setPageTitle(e.target.value)}
@@ -296,7 +319,7 @@ function BookmarkBuilder() {
 
             {/* Theme Selection */}
             <div style={{ marginBottom: '30px' }}>
-              <label style={{ display: 'block', marginBottom: '15px', fontWeight: 600, color: '#333' }}>Choose Theme:</label>
+              <div style={{ display: 'block', marginBottom: '15px', fontWeight: 600, color: '#333' }}>Choose Theme:</div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
                 {Object.entries(themes).map(([key, theme]) => (
                   <button
@@ -322,7 +345,7 @@ function BookmarkBuilder() {
             {/* Categories */}
             <div style={{ marginBottom: '30px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <label style={{ fontWeight: 600, color: '#333' }}>Categories & Links:</label>
+                <div style={{ fontWeight: 600, color: '#333' }}>Categories & Links:</div>
                 <button
                   onClick={addCategory}
                   style={{ background: '#4ade80', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' }}
@@ -334,7 +357,9 @@ function BookmarkBuilder() {
               {categories.map((category) => (
                 <div key={category.id} style={{ border: '2px solid #e0e0e0', borderRadius: '10px', padding: '20px', marginBottom: '20px' }}>
                   <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
+                    <label htmlFor={`category-${category.id}`} className="sr-only">Category Name</label>
                     <input
+                      id={`category-${category.id}`}
                       type="text"
                       value={category.name}
                       onChange={(e) => updateCategory(category.id, e.target.value)}
@@ -357,24 +382,28 @@ function BookmarkBuilder() {
                     )}
                   </div>
 
-                  {category.links.map((link, linkIndex) => (
-                    <div key={linkIndex} style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+                  {category.links.map((link) => (
+                    <div key={link.id} style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
+                      <label htmlFor={`link-name-${link.id}`} className="sr-only">Link Name</label>
                       <input
+                        id={`link-name-${link.id}`}
                         type="text"
                         placeholder="Link Name"
                         value={link.name}
-                        onChange={(e) => updateLink(category.id, linkIndex, 'name', e.target.value)}
+                        onChange={(e) => updateLink(category.id, link.id, 'name', e.target.value)}
                         style={{ flex: 1, padding: '6px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.9em' }}
                       />
+                      <label htmlFor={`link-url-${link.id}`} className="sr-only">Link URL</label>
                       <input
+                        id={`link-url-${link.id}`}
                         type="url"
                         placeholder="https://example.com"
                         value={link.url}
-                        onChange={(e) => updateLink(category.id, linkIndex, 'url', e.target.value)}
+                        onChange={(e) => updateLink(category.id, link.id, 'url', e.target.value)}
                         style={{ flex: 2, padding: '6px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '0.9em' }}
                       />
                       <button
-                        onClick={() => deleteLink(category.id, linkIndex)}
+                        onClick={() => deleteLink(category.id, link.id)}
                         style={{ background: '#ef4444', color: 'white', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8em' }}
                       >
                         ×
@@ -402,6 +431,8 @@ function BookmarkBuilder() {
               }}
               onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
               onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+              onFocus={(e) => e.target.style.transform = 'translateY(-2px)'}
+              onBlur={(e) => e.target.style.transform = 'translateY(0)'}
             >
               📥 Download Your Bookmark Page
             </button>
@@ -423,7 +454,7 @@ function BookmarkBuilder() {
           <div style={{ background: 'white', borderRadius: '15px', padding: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
             <h2 style={{ marginBottom: '20px', color: '#2c3e50' }}>Live Preview</h2>
             <div style={{
-              background: themes[selectedTheme].gradient,
+              backgroundImage: themes[selectedTheme].gradient,
               color: themes[selectedTheme].colors.text,
               borderRadius: '10px',
               padding: '20px',
@@ -453,19 +484,19 @@ function BookmarkBuilder() {
                   }}>
                     <h4 style={{
                       marginBottom: '10px',
-                      color: selectedTheme === 'minimal' ? '#333' : selectedTheme === 'dark' ? '#fbbf24' : themes[selectedTheme].colors.primary,
+                      color: getCategoryHeaderColor(selectedTheme),
                       fontSize: '1em'
                     }}>
                       {category.name}
                     </h4>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                      {category.links.slice(0, 4).map((link, index) => (
-                        <div key={index} style={{
-                          background: selectedTheme === 'dark' ? 'rgba(51,65,85,0.8)' : 'rgba(255,255,255,0.7)',
-                          color: selectedTheme === 'minimal' || selectedTheme === 'corporate' ? '#333' : '#fff',
+                      {category.links.slice(0, 4).map((link) => (
+                        <div key={link.id} style={{
+                          background: getLinkBackgroundColor(selectedTheme),
+                          color: getLinkTextColor(selectedTheme),
                           padding: '6px 10px',
                           borderRadius: '4px',
-                          borderLeft: `3px solid ${selectedTheme === 'dark' ? '#fbbf24' : themes[selectedTheme].colors.primary}`,
+                          borderLeft: `3px solid ${getLinkBorderColor(selectedTheme)}`,
                           fontSize: '0.8em'
                         }}>
                           {link.name}
