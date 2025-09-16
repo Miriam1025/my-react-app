@@ -1,6 +1,14 @@
 import React from 'react';
+import BookmarkBuilder from './BookmarkBuilder';
 
 function SalesPage() {
+  // Testing override - remove before final deployment
+  const isTestMode = window.location.search.includes('test=true');
+  
+  if (isTestMode) {
+    return <BookmarkBuilder />;
+  }
+
   const handleFaqClick = (e) => {
     const answer = e.target.nextElementSibling;
     if (answer) {
@@ -40,6 +48,7 @@ function SalesPage() {
           <a 
             href="https://buy.stripe.com/7sY8wPfd5dsgbNOeIebEA00"
             target="_blank"
+            rel="noopener noreferrer"
             style={{
               display: 'inline-block',
               background: '#ff6b6b',
@@ -77,6 +86,8 @@ function SalesPage() {
             }}
             onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
             onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+            onFocus={(e) => e.target.style.transform = 'translateY(-2px)'}
+            onBlur={(e) => e.target.style.transform = 'translateY(0)'}
           >
             👀 See Examples & Themes
           </a>
