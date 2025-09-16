@@ -16,9 +16,9 @@ export default function FamilyExample() {
             </div>
             <div style={{ background: 'white', padding: 16 }}>
               <div style={{ display: 'grid', gap: 8 }}>
-                <a href="#" style={{ padding: 10, borderRadius: 8, background: '#f1f5f9', textDecoration: 'none', color: '#0b5e43' }}>🍕 Meal Planning</a>
-                <a href="#" style={{ padding: 10, borderRadius: 8, background: '#f1f5f9', textDecoration: 'none', color: '#0b5e43' }}>🎬 Family Netflix</a>
-                <a href="#" style={{ padding: 10, borderRadius: 8, background: '#f1f5f9', textDecoration: 'none', color: '#0b5e43' }}>🛒 Online Shopping</a>
+                <a href="/" style={{ padding: 10, borderRadius: 8, background: '#f1f5f9', textDecoration: 'none', color: '#0b5e43' }}>🍕 Meal Planning</a>
+                <a href="/" style={{ padding: 10, borderRadius: 8, background: '#f1f5f9', textDecoration: 'none', color: '#0b5e43' }}>🎬 Family Netflix</a>
+                <a href="/" style={{ padding: 10, borderRadius: 8, background: '#f1f5f9', textDecoration: 'none', color: '#0b5e43' }}>🛒 Online Shopping</a>
               </div>
             </div>
           </div>

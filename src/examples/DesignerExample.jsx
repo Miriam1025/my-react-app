@@ -16,9 +16,9 @@ export default function DesignerExample() {
             </div>
             <div style={{ background: 'white', padding: 16 }}>
               <div style={{ display: 'grid', gap: 8 }}>
-                <a href="#" style={{ padding: 10, borderRadius: 8, background: '#fff7fe', textDecoration: 'none', color: '#5b44d8' }}>🌈 Behance</a>
-                <a href="#" style={{ padding: 10, borderRadius: 8, background: '#fff7fe', textDecoration: 'none', color: '#5b44d8' }}>📌 Pinterest</a>
-                <a href="#" style={{ padding: 10, borderRadius: 8, background: '#fff7fe', textDecoration: 'none', color: '#5b44d8' }}>🎭 Dribbble</a>
+                <a href="/" style={{ padding: 10, borderRadius: 8, background: '#fff7fe', textDecoration: 'none', color: '#5b44d8' }}>🌈 Behance</a>
+                <a href="/" style={{ padding: 10, borderRadius: 8, background: '#fff7fe', textDecoration: 'none', color: '#5b44d8' }}>📌 Pinterest</a>
+                <a href="/" style={{ padding: 10, borderRadius: 8, background: '#fff7fe', textDecoration: 'none', color: '#5b44d8' }}>🎭 Dribbble</a>
               </div>
             </div>
           </div>

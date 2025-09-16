@@ -17,9 +17,9 @@ export default function StudentExample() {
             <div style={{ background: 'white', padding: 16 }}>
               <input placeholder="Search bookmarks..." style={{ width: '100%', padding: 10, borderRadius: 8, border: '1px solid #e6eefc', marginBottom: 12 }} />
               <div style={{ display: 'grid', gap: 8 }}>
-                <a href="#" style={{ padding: 10, borderRadius: 8, background: '#f8fafc', textDecoration: 'none', color: '#1f2937' }}>📖 Khan Academy</a>
-                <a href="#" style={{ padding: 10, borderRadius: 8, background: '#f8fafc', textDecoration: 'none', color: '#1f2937' }}>🎓 Coursera</a>
-                <a href="#" style={{ padding: 10, borderRadius: 8, background: '#f8fafc', textDecoration: 'none', color: '#1f2937' }}>📝 Google Docs</a>
+                <a href="/" style={{ padding: 10, borderRadius: 8, background: '#f8fafc', textDecoration: 'none', color: '#1f2937' }}>📖 Khan Academy</a>
+                <a href="/" style={{ padding: 10, borderRadius: 8, background: '#f8fafc', textDecoration: 'none', color: '#1f2937' }}>🎓 Coursera</a>
+                <a href="/" style={{ padding: 10, borderRadius: 8, background: '#f8fafc', textDecoration: 'none', color: '#1f2937' }}>📝 Google Docs</a>
               </div>
             </div>
           </div>

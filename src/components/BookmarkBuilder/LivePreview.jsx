@@ -78,5 +78,5 @@ LivePreview.propTypes = {
   getLinkBorderColor: PropTypes.func,
   openCredentialsForLink: PropTypes.func,
   openAddCreds: PropTypes.func,
-  widgets: PropTypes.array
+  // widgets prop intentionally unused in this lightweight preview
 };

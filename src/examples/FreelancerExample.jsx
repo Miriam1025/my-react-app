@@ -16,9 +16,9 @@ export default function FreelancerExample() {
             </div>
             <div style={{ background: 'white', padding: 16 }}>
               <div style={{ display: 'grid', gap: 8 }}>
-                <a href="#" style={{ padding: 10, borderRadius: 8, background: '#f1f5f9', textDecoration: 'none', color: '#0f172a' }}>👥 Client Portal</a>
-                <a href="#" style={{ padding: 10, borderRadius: 8, background: '#f1f5f9', textDecoration: 'none', color: '#0f172a' }}>📊 Analytics</a>
-                <a href="#" style={{ padding: 10, borderRadius: 8, background: '#f1f5f9', textDecoration: 'none', color: '#0f172a' }}>💰 Invoicing</a>
+                <a href="/" style={{ padding: 10, borderRadius: 8, background: '#f1f5f9', textDecoration: 'none', color: '#0f172a' }}>👥 Client Portal</a>
+                <a href="/" style={{ padding: 10, borderRadius: 8, background: '#f1f5f9', textDecoration: 'none', color: '#0f172a' }}>📊 Analytics</a>
+                <a href="/" style={{ padding: 10, borderRadius: 8, background: '#f1f5f9', textDecoration: 'none', color: '#0f172a' }}>💰 Invoicing</a>
               </div>
             </div>
           </div>
