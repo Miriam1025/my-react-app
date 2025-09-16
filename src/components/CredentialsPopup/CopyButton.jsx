@@ -1,104 +1,69 @@
-// src/components/CredentialsPopup/CredentialsDisplay.jsx
-import React, { useState } from 'react';
-import { CopyButton } from './CopyButton';
+// src/components/CredentialsPopup/CopyButton.jsx
+import React from 'react';
+import PropTypes from 'prop-types';
 
-export const CredentialsDisplay = ({ credentials, isRevealed }) => {
-  const [copiedField, setCopiedField] = useState(null);
+const CopyButton = ({ value, onCopySuccess, isCopied, disabled }) => {
+  const handleCopy = async () => {
+    if (disabled || !value) return;
 
-  const handleCopySuccess = (field) => {
-    setCopiedField(field);
-    // Clear the copied indicator after 2 seconds
-    setTimeout(() => setCopiedField(null), 2000);
+    try {
+      // Modern clipboard API
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(value);
+        onCopySuccess();
+      } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = value;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+          document.execCommand('copy');
+          onCopySuccess();
+        } catch (err) {
+          console.error('Fallback copy failed:', err);
+        } finally {
+          document.body.removeChild(textArea);
+        }
+      }
+    } catch (err) {
+      console.error('Copy failed:', err);
+      // You could show an error toast here
+    }
   };
 
-  const hasCredentials = credentials && (credentials.username || credentials.password);
-
-  if (!hasCredentials) {
-    return (
-      <div className="credentials-display">
-        <div className="credentials-display__empty">
-          <div className="credentials-display__empty-icon">🔒</div>
-          <p className="credentials-display__empty-message">
-            No credentials stored for this link
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="credentials-display">
-      <div className="credentials-display__header">
-        <h4 className="credentials-display__title">
-          {isRevealed ? 'Credentials' : 'Masked Credentials'}
-        </h4>
-        {isRevealed && (
-          <div className="credentials-display__status">
-            <span className="credentials-display__status-icon">🔓</span>
-            <span className="credentials-display__status-text">Unlocked</span>
-          </div>
-        )}
-      </div>
-
-      <div className="credentials-display__fields">
-        {credentials.username && (
-          <div className="credentials-field">
-            <label className="credentials-field__label">
-              Username
-            </label>
-            <div className="credentials-field__content">
-              <div className="credentials-field__value">
-                {credentials.username}
-              </div>
-              <CopyButton
-                value={credentials.username}
-                onCopySuccess={() => handleCopySuccess('username')}
-                isCopied={copiedField === 'username'}
-                disabled={!isRevealed}
-              />
-            </div>
-          </div>
-        )}
-
-        {credentials.password && (
-          <div className="credentials-field">
-            <label className="credentials-field__label">
-              Password
-            </label>
-            <div className="credentials-field__content">
-              <div className="credentials-field__value">
-                {credentials.password}
-              </div>
-              <CopyButton
-                value={credentials.password}
-                onCopySuccess={() => handleCopySuccess('password')}
-                isCopied={copiedField === 'password'}
-                disabled={!isRevealed}
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      {credentials.notes && (
-        <div className="credentials-display__notes">
-          <label className="credentials-display__notes-label">
-            Notes
-          </label>
-          <div className="credentials-display__notes-content">
-            {credentials.notes}
-          </div>
-        </div>
+    <button
+      className={`copy-button ${isCopied ? 'copy-button--copied' : ''} ${disabled ? 'copy-button--disabled' : ''}`}
+      onClick={handleCopy}
+      disabled={disabled}
+      title={disabled ? 'Enter PIN to copy' : 'Copy to clipboard'}
+      aria-label={`Copy ${value ? 'credential' : ''} to clipboard`}
+    >
+      {isCopied ? (
+        <>
+          <span className="copy-button__icon">✓</span>
+          <span className="copy-button__text">Copied!</span>
+        </>
+      ) : (
+        <>
+          <span className="copy-button__icon">📋</span>
+          <span className="copy-button__text">Copy</span>
+        </>
       )}
-
-      <div className="credentials-display__footer">
-        <div className="credentials-display__security-notice">
-          <span className="credentials-display__security-icon">🛡️</span>
-          <span className="credentials-display__security-text">
-            Credentials are encrypted and secure
-          </span>
-        </div>
-      </div>
-    </div>
+    </button>
   );
 };
+CopyButton.propTypes = {
+  value: PropTypes.string.isRequired,
+  onCopySuccess: PropTypes.func.isRequired,
+  isCopied: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
+};
+
+export default CopyButton;

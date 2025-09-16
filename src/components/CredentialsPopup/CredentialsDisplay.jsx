@@ -1,6 +1,6 @@
 // src/components/CredentialsPopup/CredentialsDisplay.jsx
 import React, { useState } from 'react';
-import { CopyButton } from './CopyButton';
+import CopyButton from './CopyButton';
 
 export const CredentialsDisplay = ({ credentials, isRevealed }) => {
   const [copiedField, setCopiedField] = useState(null);
