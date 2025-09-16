@@ -151,7 +151,6 @@ CredentialsPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
   linkUrl: PropTypes.string,
   credentials: PropTypes.object.isRequired,
-  masterPin: PropTypes.string
 };
 
 export default CredentialsPopup;

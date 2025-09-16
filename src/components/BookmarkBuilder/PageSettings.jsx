@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const PageSettings = ({ pageTitle, setPageTitle, selectedTheme, setSelectedTheme, themes }) => {
   return (
@@ -45,3 +46,11 @@ const PageSettings = ({ pageTitle, setPageTitle, selectedTheme, setSelectedTheme
 };
 
 export default PageSettings;
+
+PageSettings.propTypes = {
+  pageTitle: PropTypes.string,
+  setPageTitle: PropTypes.func,
+  selectedTheme: PropTypes.string,
+  setSelectedTheme: PropTypes.func,
+  themes: PropTypes.object
+};

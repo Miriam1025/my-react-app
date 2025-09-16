@@ -1,6 +1,7 @@
 import React from 'react';
 import { PopupOverlay } from './PopupOverlay';
 import CredentialForm from './CredentialForm';
+import PropTypes from 'prop-types';
 
 const AddCredentialsModal = ({ isOpen, onClose, onSave, defaultUrl }) => {
   if (!isOpen) return null;
@@ -25,3 +26,10 @@ const AddCredentialsModal = ({ isOpen, onClose, onSave, defaultUrl }) => {
 };
 
 export default AddCredentialsModal;
+
+AddCredentialsModal.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
+  onSave: PropTypes.func,
+  defaultUrl: PropTypes.string
+};
