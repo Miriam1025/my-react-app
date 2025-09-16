@@ -1,5 +1,5 @@
 import React from 'react';
-import BookmarkBuilder from '../BookmarkBuilder';
+import BookmarkBuilder from './BookmarkBuilder';
 
 function SalesPage() {
   // Testing override - remove before final deployment
