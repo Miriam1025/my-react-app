@@ -73,6 +73,15 @@ export default function SalesPage() {
             >
               👨‍👩‍👧‍👦 Family Hub
             </a>
+
+            <a
+              href="/examples/remote-worker"
+              onClick={(e) => { e.preventDefault(); playClickSound(); setTimeout(() => window.location.href = '/examples/remote-worker', 140); }}
+              className="sales-persona"
+              style={personaStyle('#06b6d4', '#fff')}
+            >
+              🕒 Remote Worker Dashboard
+            </a>
           </div>
 
           {/* CTA under examples */}
