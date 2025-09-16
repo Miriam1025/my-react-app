@@ -62,10 +62,23 @@ function SalesPage() {
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <a
               href="/examples#student"
-              onClick={(e) => { e.preventDefault(); playClickSound(); setTimeout(() => window.location.href = '/examples#student', 160); }}
-              style={{ padding: '12px 20px', borderRadius: 12, background: '#eef2ff', color: '#1e3c72', textDecoration: 'none', fontWeight: 700, boxShadow: '0 6px 18px rgba(102,126,234,0.08)' }}
+              onClick={(e) => { e.preventDefault(); playClickSound(); setTimeout(() => window.location.href = '/examples#student', 140); }}
+              style={{
+                padding: '12px 22px',
+                borderRadius: 12,
+                background: '#205295',
+                color: 'white',
+                textDecoration: 'none',
+                fontWeight: 700,
+                boxShadow: '0 6px 18px rgba(32,81,149,0.12)',
+                transition: 'transform 120ms ease, box-shadow 120ms ease'
+              }}
               onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
               onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              onFocus={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
+              onBlur={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              onMouseDown={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(1px)'; el.style.boxShadow = '0 3px 8px rgba(0,0,0,0.12)'; }}
+              onMouseUp={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = '0 6px 18px rgba(32,81,149,0.12)'; }}
             >
               👩‍🎓 Student Study Hub
             </a>
@@ -86,6 +99,8 @@ function SalesPage() {
               }}
               onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
               onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 12px 0 rgba(2,6,23,0.12), 0 22px 36px rgba(2,6,23,0.06)'; }}
+              onFocus={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
+              onBlur={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 12px 0 rgba(2,6,23,0.12), 0 22px 36px rgba(2,6,23,0.06)'; }}
               onMouseDown={(e) => { const el = e.currentTarget; el.dataset.origShadow = el.style.boxShadow; el.style.transform = 'translateY(2px)'; el.style.boxShadow = '0 6px 0 rgba(0,0,0,0.12), 0 12px 24px rgba(0,0,0,0.08)'; }}
               onMouseUp={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = el.dataset.origShadow || ''; }}
               onMouseLeave={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = el.dataset.origShadow || ''; }}
@@ -109,6 +124,8 @@ function SalesPage() {
               }}
               onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
               onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 0 rgba(118,75,162,0.08), 0 20px 36px rgba(118,75,162,0.06)'; }}
+              onFocus={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
+              onBlur={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 0 rgba(118,75,162,0.08), 0 20px 36px rgba(118,75,162,0.06)'; }}
               onMouseDown={(e) => { const el = e.currentTarget; el.dataset.origShadow = el.style.boxShadow; el.style.transform = 'translateY(2px)'; el.style.boxShadow = '0 4px 0 rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.06)'; }}
               onMouseUp={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = el.dataset.origShadow || ''; }}
               onMouseLeave={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = el.dataset.origShadow || ''; }}
@@ -117,23 +134,23 @@ function SalesPage() {
             </a>
             <a
               href="/examples#family"
-              onClick={(e) => { e.preventDefault(); playClickSound(); setTimeout(() => window.location.href = '/examples#family', 160); }}
+              onClick={(e) => { e.preventDefault(); playClickSound(); setTimeout(() => window.location.href = '/examples#family', 140); }}
               style={{
-                padding: '12px 20px',
+                padding: '12px 22px',
                 borderRadius: 12,
-                background: 'linear-gradient(180deg,#f0fff8 0%,#ecfdf5 100%)',
-                color: '#065f46',
+                background: '#0f6b4a',
+                color: 'white',
                 textDecoration: 'none',
                 fontWeight: 700,
-                border: '1px solid rgba(6,95,70,0.06)',
-                boxShadow: '0 10px 0 rgba(6,95,70,0.06), 0 18px 32px rgba(6,95,70,0.04)',
+                boxShadow: '0 6px 18px rgba(15,107,74,0.12)',
                 transition: 'transform 120ms ease, box-shadow 120ms ease'
               }}
-              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
-              onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 0 rgba(6,95,70,0.06), 0 18px 32px rgba(6,95,70,0.04)'; }}
-              onMouseDown={(e) => { const el = e.currentTarget; el.dataset.origShadow = el.style.boxShadow; el.style.transform = 'translateY(2px)'; el.style.boxShadow = '0 4px 0 rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.06)'; }}
-              onMouseUp={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = el.dataset.origShadow || ''; }}
-              onMouseLeave={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = el.dataset.origShadow || ''; }}
+              onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
+              onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              onFocus={(e) => e.currentTarget.style.transform = 'translateY(-3px)'}
+              onBlur={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+              onMouseDown={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(1px)'; el.style.boxShadow = '0 3px 8px rgba(0,0,0,0.12)'; }}
+              onMouseUp={(e) => { const el = e.currentTarget; el.style.transform = 'translateY(0)'; el.style.boxShadow = '0 6px 18px rgba(15,107,74,0.12)'; }}
             >
               👨‍👩‍👧‍👦 Family Hub
             </a>

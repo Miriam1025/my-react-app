@@ -1,22 +1,28 @@
 // small WebAudio click sound helper
+let _audioCtx = null;
 export function playClickSound() {
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.type = 'sine';
-    o.frequency.setValueAtTime(1000, ctx.currentTime);
-    g.gain.setValueAtTime(0.0001, ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime + 0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.18);
+    if (!window || !('AudioContext' in window || 'webkitAudioContext' in window)) return;
+    if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (_audioCtx.state === 'suspended') _audioCtx.resume();
+
+    const o = _audioCtx.createOscillator();
+    const g = _audioCtx.createGain();
+    o.type = 'triangle';
+    const now = _audioCtx.currentTime;
+    o.frequency.setValueAtTime(1000, now);
+
+    // very short gain envelope for a click
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(0.12, now + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+
     o.connect(g);
-    g.connect(ctx.destination);
-    o.start();
-    setTimeout(() => {
-      try { o.stop(); ctx.close(); } catch(err) { console.debug('audio close failed', err); }
-    }, 200);
-  } catch (e) {
+    g.connect(_audioCtx.destination);
+    o.start(now);
+    o.stop(now + 0.14);
+    // keep context open for future clicks (avoids resume latency)
+  } catch {
     // WebAudio may be blocked in some environments; ignore silently
-    console.warn('Audio not available', e);
   }
 }
