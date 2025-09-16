@@ -1,6 +1,7 @@
 import React from 'react';
 import BookmarkBuilder from './BookmarkBuilder';
 import { playClickSound } from '../utils/sound';
+import './SalesPage.css';
 
 export default function SalesPage() {
   const isTestMode = typeof window !== 'undefined' && window.location.search.includes('test=true');
@@ -40,8 +41,7 @@ export default function SalesPage() {
             <a
               href="/examples#student"
               onMouseDown={() => playClickSound()}
-              onFocus={(e) => (e.currentTarget.style.transform = 'translateY(-3px)')}
-              onBlur={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+              className="sales-persona"
               style={personaStyle('#184e8b', '#fff')}
             >
               👩‍🎓 Student Study Hub
@@ -50,8 +50,7 @@ export default function SalesPage() {
             <a
               href="/examples#freelancer"
               onMouseDown={() => playClickSound()}
-              onFocus={(e) => (e.currentTarget.style.transform = 'translateY(-3px)')}
-              onBlur={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+              className="sales-persona"
               style={personaStyle('#0f172a', '#fff')}
             >
               💼 Freelancer Dashboard
@@ -60,8 +59,7 @@ export default function SalesPage() {
             <a
               href="/examples#designer"
               onMouseDown={() => playClickSound()}
-              onFocus={(e) => (e.currentTarget.style.transform = 'translateY(-3px)')}
-              onBlur={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+              className="sales-persona"
               style={personaStyle('linear-gradient(180deg,#7a6ce0,#f7d9fb)')}
             >
               🎨 Designer Inspiration
@@ -70,8 +68,7 @@ export default function SalesPage() {
             <a
               href="/examples#family"
               onMouseDown={() => playClickSound()}
-              onFocus={(e) => (e.currentTarget.style.transform = 'translateY(-3px)')}
-              onBlur={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+              className="sales-persona"
               style={personaStyle('#0b5e43', '#fff')}
             >
               👨‍👩‍👧‍👦 Family Hub
@@ -85,7 +82,8 @@ export default function SalesPage() {
               target="_blank"
               rel="noreferrer"
               onMouseDown={() => playClickSound()}
-              style={{ padding: '12px 26px', borderRadius: 14, background: '#ff6b6b', color: 'white', textDecoration: 'none', fontWeight: 800, boxShadow: '0 12px 36px rgba(0,0,0,0.12)' }}
+              className="sales-cta"
+              style={{ background: '#ff6b6b', color: 'white' }}
             >
               Get Started Now — $29
             </a>
@@ -132,7 +130,9 @@ export default function SalesPage() {
       <section style={{ padding: '48px 20px', textAlign: 'center' }}>
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <h3 style={{ fontSize: '1.6em', marginBottom: '12px' }}>Ready to create your first page?</h3>
-          <a href="https://buy.stripe.com/7sY8wPfd5dsgbNOeIebEA00" target="_blank" rel="noreferrer" onMouseDown={() => playClickSound()} style={{ padding: '14px 32px', borderRadius: 12, background: '#06b6d4', color: 'white', textDecoration: 'none', fontWeight: 700, boxShadow: '0 12px 36px rgba(0,0,0,0.08)' }}>Get Started Now — $29</a>
+          <a href="https://buy.stripe.com/7sY8wPfd5dsgbNOeIebEA00" target="_blank" rel="noreferrer" onMouseDown={() => playClickSound()} className="sales-cta" style={{ background: '#06b6d4', color: 'white', padding: '14px 32px', borderRadius: 12 }}>
+            Get Started Now — $29
+          </a>
         </div>
       </section>
     </div>
