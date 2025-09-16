@@ -6,6 +6,7 @@ import StudentExample from './examples/StudentExample';
 import FreelancerExample from './examples/FreelancerExample';
 import DesignerExample from './examples/DesignerExample';
 import FamilyExample from './examples/FamilyExample';
+import RemoteWorkerExample from './examples/RemoteWorkerExample';
 import './App.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
   if (path === '/examples/freelancer') return <FreelancerExample />;
   if (path === '/examples/designer') return <DesignerExample />;
   if (path === '/examples/family') return <FamilyExample />;
+  if (path === '/examples/remote-worker') return <RemoteWorkerExample />;
 
   return <SalesPage />;
 }
