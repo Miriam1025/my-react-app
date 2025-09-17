@@ -83,7 +83,19 @@ const PageSettings = ({ pageTitle, setPageTitle, selectedTheme, setSelectedTheme
       <div style={{ marginBottom: '30px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
           <div style={{ fontWeight: 600, color: '#333' }}>Widgets</div>
-          <button onClick={() => addWidget()} style={{ padding: '8px 12px', borderRadius: 8 }}>+ Add Widget</button>
+          <button onClick={() => addWidget()} style={{ 
+  padding: '12px 16px', 
+  borderRadius: 8, 
+  backgroundColor: '#4CAF50', 
+  color: 'white', 
+  fontWeight: 'bold', 
+  border: 'none', 
+  cursor: 'pointer', 
+  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', 
+  transition: 'background-color 0.3s ease' 
+}} 
+  onMouseOver={(e) => e.target.style.backgroundColor = '#45a049'} 
+  onMouseOut={(e) => e.target.style.backgroundColor = '#4CAF50'}>+ Add Widget</button>
         </div>
 
         <div style={{ display: 'grid', gap: 8 }}>
