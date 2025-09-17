@@ -95,7 +95,9 @@ const PageSettings = ({ pageTitle, setPageTitle, selectedTheme, setSelectedTheme
   transition: 'background-color 0.3s ease' 
 }} 
   onMouseOver={(e) => e.target.style.backgroundColor = '#45a049'} 
-  onMouseOut={(e) => e.target.style.backgroundColor = '#4CAF50'}>+ Add Widget</button>
+  onMouseOut={(e) => e.target.style.backgroundColor = '#4CAF50'} 
+  onFocus={(e) => e.target.style.backgroundColor = '#45a049'} 
+  onBlur={(e) => e.target.style.backgroundColor = '#4CAF50'}>+ Add Widget</button>
         </div>
 
         <div style={{ display: 'grid', gap: 8 }}>
