@@ -2,6 +2,39 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const PageSettings = ({ pageTitle, setPageTitle, selectedTheme, setSelectedTheme, themes, widgets, addWidget, removeWidget, updateWidget }) => {
+  const AVAILABLE_ZONES = [
+    'UTC', 'America/New_York', 'America/Los_Angeles', 'Europe/London', 'Europe/Berlin', 'Asia/Tokyo', 'Australia/Sydney'
+  ];
+
+  // helper handlers to avoid deeply nested inline functions
+  const onZoneTzChange = (widgetId, zoneId, tz) => {
+    const w = widgets.find(w => w.id === widgetId);
+    if (!w) return;
+    const next = { ...w, zones: (w.zones || []).map(z => z.id === zoneId ? { ...z, tz } : z) };
+    updateWidget(widgetId, next);
+  };
+
+  const onZoneLabelChange = (widgetId, zoneId, label) => {
+    const w = widgets.find(w => w.id === widgetId);
+    if (!w) return;
+    const next = { ...w, zones: (w.zones || []).map(z => z.id === zoneId ? { ...z, label } : z) };
+    updateWidget(widgetId, next);
+  };
+
+  const onRemoveZone = (widgetId, zoneId) => {
+    const w = widgets.find(w => w.id === widgetId);
+    if (!w) return;
+    const next = { ...w, zones: (w.zones || []).filter(z => z.id !== zoneId) };
+    updateWidget(widgetId, next);
+  };
+
+  const onAddZone = (widgetId) => {
+    const w = widgets.find(w => w.id === widgetId);
+    if (!w) return;
+    const newZone = { id: Date.now() + Math.random(), tz: AVAILABLE_ZONES[0], label: '' };
+    const next = { ...w, zones: [ ...(w.zones || []), newZone ] };
+    updateWidget(widgetId, next);
+  };
   return (
     <div>
       <h2 style={{ marginBottom: '30px', color: '#2c3e50' }}>Build Your Page</h2>
@@ -50,14 +83,36 @@ const PageSettings = ({ pageTitle, setPageTitle, selectedTheme, setSelectedTheme
 
         <div style={{ display: 'grid', gap: 8 }}>
           {widgets.map((w) => (
-            <div key={w.id} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-              <select value={w.type} onChange={(e) => updateWidget(w.id, { ...w, type: e.target.value })} style={{ padding: 8 }}>
-                <option value="search">Search</option>
-                <option value="featured">Featured Link</option>
-                <option value="text">Text</option>
-              </select>
-              <input value={w.label || ''} onChange={(e) => updateWidget(w.id, { ...w, label: e.target.value })} placeholder="Label / content" style={{ flex: 1, padding: 8 }} />
-              <button onClick={() => removeWidget(w.id)} style={{ padding: '6px 8px' }}>Remove</button>
+            <div key={w.id} style={{ display: 'flex', gap: 8, flexDirection: 'column', alignItems: 'stretch' }}>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <select value={w.type} onChange={(e) => updateWidget(w.id, { ...w, type: e.target.value })} style={{ padding: 8 }}>
+                  <option value="search">Search</option>
+                  <option value="featured">Featured Link</option>
+                  <option value="text">Text</option>
+                  <option value="clocks">Clocks</option>
+                </select>
+                <input value={w.label || ''} onChange={(e) => updateWidget(w.id, { ...w, label: e.target.value })} placeholder="Label / content" style={{ flex: 1, padding: 8 }} />
+                <button onClick={() => removeWidget(w.id)} style={{ padding: '6px 8px' }}>Remove</button>
+              </div>
+
+              {/* Clocks widget configuration */}
+              {w.type === 'clocks' && (
+                <div style={{ marginTop: 8, padding: 8, borderRadius: 8, background: '#f3f4f6' }}>
+                  <div style={{ fontWeight: 600, marginBottom: 8 }}>Clocks</div>
+                  {(w.zones || []).map((z) => (
+                    <div key={z.id} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+                      <select value={z.tz} onChange={(e) => onZoneTzChange(w.id, z.id, e.target.value)} style={{ padding: 8 }}>
+                        {AVAILABLE_ZONES.map(zone => <option key={zone} value={zone}>{zone}</option>)}
+                      </select>
+                      <input value={z.label || ''} onChange={(e) => onZoneLabelChange(w.id, z.id, e.target.value)} placeholder="Custom label (optional)" style={{ flex: 1, padding: 8 }} />
+                      <button onClick={() => onRemoveZone(w.id, z.id)} style={{ padding: '6px 8px' }}>Remove</button>
+                    </div>
+                  ))}
+                  <div>
+                    <button onClick={() => onAddZone(w.id)} style={{ padding: '8px 10px', borderRadius: 8 }}>+ Add Zone</button>
+                  </div>
+                </div>
+              )}
             </div>
           ))}
         </div>

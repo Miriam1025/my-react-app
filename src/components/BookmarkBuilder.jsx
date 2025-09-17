@@ -286,6 +286,15 @@ function BookmarkBuilder() {
       ${widgets.map(w => {
         if (w.type === 'search') return `<input type="text" id="searchInput" class="search-box" placeholder="${(w.label || 'Search your bookmarks...')}" onkeyup="searchLinks()">`;
         if (w.type === 'featured') return `<div style="margin-top:12px;"><a href="#" class="link featured">${(w.label || 'Featured Link')}</a></div>`;
+        if (w.type === 'clocks') {
+          // build clocks markup without nested template literals for lint friendliness
+          const clockBits = (w.zones || []).map(z => {
+            const timeStr = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: z.tz });
+            const label = z.label?.length ? z.label : z.tz;
+            return `<div style="min-width:110px; text-align:center;"><div style="font-size:1.2em; font-weight:700;">${timeStr}</div><div style="font-size:0.85em; opacity:0.85;">${label}</div></div>`;
+          }).join('');
+          return `<div style="display:flex; gap:12px; margin-top:12px; background:#0f172a; color:white; padding:12px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.15);">${clockBits}</div>`;
+        }
         return `<div style="margin-top:12px; font-size:0.95em; color:#333;">${(w.label || '')}</div>`;
       }).join('')}
         </div>

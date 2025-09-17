@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const LivePreview = ({ pageTitle, categories, selectedTheme, themes, getCategoryHeaderColor, getLinkBackgroundColor, getLinkTextColor, getLinkBorderColor, openCredentialsForLink, openAddCreds }) => {
+const LivePreview = ({ pageTitle, categories, selectedTheme, themes, getCategoryHeaderColor, getLinkBackgroundColor, getLinkTextColor, getLinkBorderColor, openCredentialsForLink, openAddCreds, widgets }) => {
   return (
     <div style={{ background: 'white', borderRadius: '15px', padding: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
       <h2 style={{ marginBottom: '20px', color: '#2c3e50' }}>Live Preview</h2>
@@ -16,9 +16,21 @@ const LivePreview = ({ pageTitle, categories, selectedTheme, themes, getCategory
         <div style={{ textAlign: 'center', marginBottom: '20px' }}>
           <h3 style={{ fontSize: '1.5em', marginBottom: '10px' }}>{pageTitle}</h3>
           {/* Widgets (search, featured, text) */}
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap', marginTop: 8 }}>
-            {/* simple demo: show a search box and any text/featured widgets */}
+          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginTop: 8 }}>
+            {/* simple demo: show a search box */}
             <input placeholder="🔍 Search your bookmarks..." style={{ padding: '8px 12px', borderRadius: 20, border: '1px solid #e6eefc', minWidth: 240 }} />
+
+            {/* Render clocks widget(s) */}
+            {widgets?.filter(w => w.type === 'clocks')?.map((w) => (
+              <div key={w.id} style={{ display: 'flex', gap: 10, padding: 12, borderRadius: 12, background: '#0f172a', color: 'white', boxShadow: '0 6px 18px rgba(0,0,0,0.2)' }}>
+                {w.zones?.map((z) => (
+                  <div key={z.id} style={{ minWidth: 110, textAlign: 'center' }}>
+                    <div style={{ fontSize: '1.2em', fontWeight: 700 }}>{new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: z.tz }).format(new Date())}</div>
+                    <div style={{ fontSize: '0.85em', opacity: 0.85 }}>{z.label?.length ? z.label : z.tz}</div>
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
         </div>
 
@@ -78,5 +90,5 @@ LivePreview.propTypes = {
   getLinkBorderColor: PropTypes.func,
   openCredentialsForLink: PropTypes.func,
   openAddCreds: PropTypes.func,
-  // widgets prop intentionally unused in this lightweight preview
+  widgets: PropTypes.array
 };
