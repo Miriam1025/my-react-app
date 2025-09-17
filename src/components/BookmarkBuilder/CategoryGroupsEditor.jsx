@@ -20,7 +20,6 @@ const CategoryGroupsEditor = ({
           + Add Group
         </button>
       </div>
-
       {groups.map((group) => (
         <div key={group.id} style={{ border: '2px solid #e0e0e0', borderRadius: '10px', padding: '20px', marginBottom: '20px' }}>
           <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
@@ -38,7 +37,6 @@ const CategoryGroupsEditor = ({
               Delete Group
             </button>
           </div>
-
           <div>
             <div style={{ fontWeight: 600, marginBottom: '10px' }}>Categories:</div>
             {group.categories.map((category) => (
@@ -67,10 +65,10 @@ const CategoryGroupsEditor = ({
 
 CategoryGroupsEditor.propTypes = {
   groups: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     name: PropTypes.string.isRequired,
     categories: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string.isRequired,
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       name: PropTypes.string.isRequired
     })).isRequired
   })).isRequired,
@@ -82,3 +80,4 @@ CategoryGroupsEditor.propTypes = {
 };
 
 export default CategoryGroupsEditor;
+     

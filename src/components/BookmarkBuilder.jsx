@@ -1,8 +1,32 @@
+  // Add a category to a group
+  const addCategoryToGroup = (groupId) => {
+    setGroups(groups.map(group =>
+      group.id === groupId
+        ? {
+            ...group,
+            categories: [
+              ...group.categories,
+              { id: Date.now(), name: `New Category ${group.categories.length + 1}` }
+            ]
+          }
+        : group
+    ));
+  };
+  // Add a new group
+  const addGroup = () => {
+    const newGroup = {
+      id: Date.now(),
+      name: `New Group ${groups.length + 1}`,
+      categories: []
+    };
+    setGroups([...groups, newGroup]);
+  };
 import React, { useState } from 'react';
 import CredentialsPopup from './CredentialsPopup';
 import AddCredentialsModal from './CredentialsPopup/AddCredentialsModal';
 import PageSettings from './BookmarkBuilder/PageSettings';
-import CategoriesEditor from './BookmarkBuilder/CategoriesEditor';
+import CategoryGroupsEditor from './BookmarkBuilder/CategoryGroupsEditor';
+import CategoryEditor from './BookmarkBuilder/CategoryEditor';
 import LivePreview from './BookmarkBuilder/LivePreview';
 
 function BookmarkBuilder() {
@@ -18,6 +42,8 @@ function BookmarkBuilder() {
       ]
     }
   ]);
+  // New: State for category groups
+  const [groups, setGroups] = useState([]);
 
   // Credentials popup state (local demo integration)
   const [isCredPopupOpen, setIsCredPopupOpen] = useState(false);
@@ -357,16 +383,34 @@ function BookmarkBuilder() {
           <div style={{ background: 'white', borderRadius: '15px', padding: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
             <PageSettings pageTitle={pageTitle} setPageTitle={setPageTitle} selectedTheme={selectedTheme} setSelectedTheme={setSelectedTheme} themes={themes} widgets={widgets} addWidget={addWidget} removeWidget={removeWidget} updateWidget={updateWidget} />
             <div style={{ marginTop: 12 }}>
-              <CategoriesEditor
+              <CategoryGroupsEditor
+                groups={groups}
+                addGroup={addGroup}
+                updateGroup={(groupId, newName) => {
+                  setGroups(groups.map(group =>
+                    group.id === groupId ? { ...group, name: newName } : group
+                  ));
+                }}
+                deleteGroup={(groupId) => {
+                  setGroups(groups.filter(group => group.id !== groupId));
+                }}
+                addCategoryToGroup={addCategoryToGroup}
+                removeCategoryFromGroup={(groupId, categoryId) => {
+                  setGroups(groups.map(group =>
+                    group.id === groupId
+                      ? {
+                          ...group,
+                          categories: group.categories.filter(cat => cat.id !== categoryId)
+                        }
+                      : group
+                  ));
+                }}
+              />
+              <CategoryEditor
                 categories={categories}
                 addCategory={addCategory}
-                addLink={addLink}
                 updateCategory={updateCategory}
-                updateLink={updateLink}
                 deleteCategory={deleteCategory}
-                deleteLink={deleteLink}
-                openAddCreds={openAddCreds}
-                openCredentialsForLink={openCredentialsForLink}
               />
             </div>
             <div style={{ marginTop: 12 }}>
