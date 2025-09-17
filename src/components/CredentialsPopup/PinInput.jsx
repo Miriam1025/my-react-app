@@ -1,5 +1,6 @@
 // src/components/CredentialsPopup/PinInput.jsx
 import React, { useState, useRef, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 export const PinInput = ({ onSubmit, hasError, isLoading, errorMessage }) => {
   const [pin, setPin] = useState(['', '', '', '']);
@@ -70,6 +71,9 @@ export const PinInput = ({ onSubmit, hasError, isLoading, errorMessage }) => {
     }
   };
 
+  // Replace dynamic key generation with a stable unique identifier
+  const pinInputIds = ['pin-1', 'pin-2', 'pin-3', 'pin-4'];
+
   return (
     <div className="pin-input">
       <div className="pin-input__header">
@@ -80,15 +84,16 @@ export const PinInput = ({ onSubmit, hasError, isLoading, errorMessage }) => {
       </div>
 
       <div className="pin-input__fields">
-        {pin.map((digit, index) => (
+        {pinInputIds.map((id, idx) => (
           <input
-            key={index}
-            ref={(el) => (inputRefs.current[index] = el)}
+            key={id}
+            id={id}
+            ref={(el) => (inputRefs.current[idx] = el)}
             type="password"
-            value={digit}
-            onChange={(e) => handleInputChange(index, e.target.value)}
-            onKeyDown={(e) => handleKeyDown(index, e)}
-            onPaste={index === 0 ? handlePaste : undefined}
+            value={pin[idx]}
+            onChange={(e) => handleInputChange(idx, e.target.value)}
+            onKeyDown={(e) => handleKeyDown(idx, e)}
+            onPaste={idx === 0 ? handlePaste : undefined}
             className={`pin-input__field ${hasError ? 'pin-input__field--error' : ''}`}
             maxLength="1"
             inputMode="numeric"
@@ -114,4 +119,11 @@ export const PinInput = ({ onSubmit, hasError, isLoading, errorMessage }) => {
       )}
     </div>
   );
+};
+
+PinInput.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  hasError: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  errorMessage: PropTypes.string
 };
