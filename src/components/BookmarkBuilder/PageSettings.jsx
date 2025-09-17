@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 
 const PageSettings = ({ pageTitle, setPageTitle, selectedTheme, setSelectedTheme, themes, widgets, addWidget, removeWidget, updateWidget }) => {
   const AVAILABLE_ZONES = [
-    'UTC', 'America/New_York', 'America/Los_Angeles', 'Europe/London', 'Europe/Berlin', 'Asia/Tokyo', 'Australia/Sydney'
+    'UTC', 'America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles',
+    'America/Phoenix', 'America/Anchorage', 'America/Adak', 'Pacific/Honolulu',
+    'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Europe/Madrid', 'Europe/Rome',
+    'Asia/Tokyo', 'Asia/Shanghai', 'Asia/Singapore', 'Asia/Kolkata', 'Asia/Dubai',
+    'Australia/Sydney', 'Australia/Melbourne', 'Australia/Brisbane', 'Australia/Perth',
+    'Africa/Johannesburg', 'Africa/Cairo', 'Africa/Lagos', 'Africa/Nairobi'
   ];
 
   // helper handlers to avoid deeply nested inline functions
