@@ -5,6 +5,7 @@ import './SalesPage.css';
 
 export default function SalesPage() {
   const isTestMode = typeof window !== 'undefined' && window.location.search.includes('test=true');
+  console.log('Query string:', window.location.search); // Debugging log
   if (isTestMode) return <BookmarkBuilder />;
 
   const personaStyle = (bg, color) => ({
