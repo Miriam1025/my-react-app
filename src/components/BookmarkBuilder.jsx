@@ -128,11 +128,16 @@ function BookmarkBuilder() {
       setCurrentUrlForCredentials(link.url);
     }
   };
+  
+  // Function for opening credentials popup from the CategoryEditor component
+  const openAddCreds = (link) => {
+    openCredentialsForLink(link);
+  };
 
   // Handle credentials detection and saving
   const handleSaveCredentials = async (credentials) => {
     // If credentials were provided from browser detection, show success message
-    if (credentials && credentials.url) {
+    if (credentials?.url) {
       console.log('Credentials saved:', credentials.url);
       
       // Here you would typically call your encryption and storage functions

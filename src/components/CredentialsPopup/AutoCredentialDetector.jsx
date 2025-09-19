@@ -36,7 +36,8 @@ const AutoCredentialDetector = ({
     try {
       const urlObj = new URL(url);
       setDomain(urlObj.hostname.replace('www.', ''));
-    } catch (e) {
+    } catch (error) {
+      console.error("Error parsing URL:", error);
       setDomain('this website');
     }
     
@@ -59,7 +60,10 @@ const AutoCredentialDetector = ({
           setPinRequired(hasStoredPin());
         } else {
           // No credentials found, close the component
-          if (onClose) onClose();
+          if (onClose) {
+            onClose();
+          }
+          console.log('No credentials detected for this URL');
         }
       }
     };

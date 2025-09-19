@@ -7,11 +7,14 @@ import FreelancerExample from './examples/FreelancerExample';
 import DesignerExample from './examples/DesignerExample';
 import FamilyExample from './examples/FamilyExample';
 import RemoteWorkerExample from './examples/RemoteWorkerExample';
+import TestLivePreview from './components/TestLivePreview';
 import './App.css';
 
 function App() {
   const path = typeof window !== 'undefined' ? window.location.pathname : '/';
+  const isTestPreview = typeof window !== 'undefined' && window.location.search.includes('testpreview=true');
 
+  if (isTestPreview) return <TestLivePreview />;
   if (path === '/examples' || path === '/examples/') return <Examples />;
   if (path === '/examples/student') return <StudentExample />;
   if (path === '/examples/freelancer') return <FreelancerExample />;

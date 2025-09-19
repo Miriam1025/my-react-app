@@ -1,14 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { hasStoredPin } from '../CredentialsPopup/utils/credentialsUtils';
-
-// Animation keyframes for search popup
-const fadeInAnimation = `
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-`;
 
 const LivePreviewNew = ({ pageTitle, headerTitle, categories, selectedTheme, themes, getCategoryHeaderColor, getLinkBackgroundColor, getLinkTextColor, getLinkBorderColor, openCredentialsForLink, widgets, linksWithCredentials = new Set() }) => {
   const [showSearch, setShowSearch] = useState(false);
@@ -16,7 +7,35 @@ const LivePreviewNew = ({ pageTitle, headerTitle, categories, selectedTheme, the
   const safeCategories = Array.isArray(categories) ? categories : [];
   const searchRef = useRef(null);
   const timerRef = useRef(null);
+  
+  // Helper functions for styling
+  const getSearchBackgroundColor = () => {
+    if (!showSearch) return 'transparent';
+    return selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)';
+  };
 
+  const getZoneLabel = (zone) => {
+    if (zone.label?.length) return zone.label;
+    if (zone.tz === 'America/Chicago') return 'Minneapolis, MN';
+    return zone.tz;
+  };
+
+  const getCredentialBackgroundColor = (hasCredential) => {
+    if (hasCredential) return 'transparent';
+    return selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.05)';
+  };
+
+  const getCredentialBorder = (hasCredential) => {
+    if (hasCredential) return 'none';
+    const borderColor = selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)';
+    return `1px solid ${borderColor}`;
+  };
+
+  const getCredentialColor = (hasCredential) => {
+    if (hasCredential) return getLinkTextColor(selectedTheme);
+    return selectedTheme === 'dark' ? 'rgba(150, 150, 150, 0.6)' : 'rgba(100, 100, 100, 0.5)';
+  };
+  
   // Functions to handle hover with delay
   const handleMouseEnter = () => {
     clearTimeout(timerRef.current);
@@ -103,8 +122,8 @@ const LivePreviewNew = ({ pageTitle, headerTitle, categories, selectedTheme, the
     };
   }, []);
   
-  // Function to check if credentials exist for a URL
-  const hasCredsForUrl = (url) => {
+  // Helper function to check if credentials exist for a URL
+  const hasCredentials = (url) => {
     return linksWithCredentials.has(url);
   };
   
@@ -138,16 +157,25 @@ const LivePreviewNew = ({ pageTitle, headerTitle, categories, selectedTheme, the
           <div style={{ fontWeight: 500, fontSize: '0.9em', opacity: 0.8 }}>
             {headerTitle}
           </div>
-          <div 
+          <button 
             ref={searchRef}
             className="search-container"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            style={{ height: '32px', display: 'flex', alignItems: 'center' }}
+            style={{ 
+              height: '32px', 
+              display: 'flex', 
+              alignItems: 'center',
+              background: 'transparent',
+              border: 'none',
+              padding: 0,
+              cursor: 'pointer'
+            }}
+            aria-label="Search bookmarks"
           >
             <div 
               style={{
-                background: showSearch ? (selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)') : 'transparent',
+                background: getSearchBackgroundColor(),
                 border: 'none',
                 cursor: 'pointer',
                 fontSize: '1.1em',
@@ -204,7 +232,7 @@ const LivePreviewNew = ({ pageTitle, headerTitle, categories, selectedTheme, the
                 />
               </div>
             )}
-          </div>
+          </button>
         </div>
         
         <div style={{ padding: '20px' }}>
@@ -218,7 +246,7 @@ const LivePreviewNew = ({ pageTitle, headerTitle, categories, selectedTheme, the
                     <div key={z.id} style={{ minWidth: 110, textAlign: 'center' }}>
                       <div style={{ fontSize: '1.2em', fontWeight: 700 }}>{new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: z.tz }).format(new Date())}</div>
                       <div style={{ fontSize: '0.85em', opacity: 0.85 }}>
-                        {z.label?.length ? z.label : (z.tz === 'America/Chicago' ? 'Minneapolis, MN' : z.tz)}
+                        {getZoneLabel(z)}
                       </div>
                     </div>
                   ))}
@@ -257,27 +285,25 @@ const LivePreviewNew = ({ pageTitle, headerTitle, categories, selectedTheme, the
                         <div>
                           {link?.url && (
                             <button 
-                              onClick={() => openCredentialsForLink && openCredentialsForLink(link)} 
+                              onClick={() => openCredentialsForLink?.(link)}
                               style={{ 
-                                background: hasCredsForUrl(link.url) ? 'transparent' : (selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.05)'),
-                                border: hasCredsForUrl(link.url) ? 'none' : `1px solid ${selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)'}`,
+                                background: getCredentialBackgroundColor(hasCredentials(link.url)),
+                                border: getCredentialBorder(hasCredentials(link.url)),
                                 borderRadius: '3px',
-                                padding: hasCredsForUrl(link.url) ? '0' : '2px 4px',
+                                padding: hasCredentials(link.url) ? '0' : '2px 4px',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 cursor: 'pointer'
                               }} 
-                              title={hasCredsForUrl(link.url) ? "View credentials" : "No credentials stored"}
+                              title={hasCredentials(link.url) ? "View credentials" : "No credentials stored"}
                             >
                               <span style={{
                                 fontSize: '0.9em',
-                                color: hasCredsForUrl(link.url) 
-                                  ? getLinkTextColor(selectedTheme) 
-                                  : selectedTheme === 'dark' ? 'rgba(150, 150, 150, 0.6)' : 'rgba(100, 100, 100, 0.5)',
-                                opacity: hasCredsForUrl(link.url) ? 1 : 0.6,
-                                filter: hasCredsForUrl(link.url) ? 'none' : 'grayscale(70%)',
-                                textShadow: selectedTheme === 'dark' && !hasCredsForUrl(link.url) ? '0 0 4px rgba(255,255,255,0.2)' : 'none'
+                                color: getCredentialColor(hasCredentials(link.url)),
+                                opacity: hasCredentials(link.url) ? 1 : 0.6,
+                                filter: hasCredentials(link.url) ? 'none' : 'grayscale(70%)',
+                                textShadow: selectedTheme === 'dark' && !hasCredentials(link.url) ? '0 0 4px rgba(255,255,255,0.2)' : 'none'
                               }}>
                                 🔒
                               </span>

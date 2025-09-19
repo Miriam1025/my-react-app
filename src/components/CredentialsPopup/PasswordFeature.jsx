@@ -41,6 +41,7 @@ const PasswordFeature = ({ enabled, onToggleEnabled }) => {
         <h3>Remember Passwords</h3>
         <div className="password-toggle">
           <label className="switch">
+            <span className="visually-hidden">Enable password storage</span>
             <input 
               type="checkbox" 
               checked={enabled} 

@@ -8,6 +8,33 @@ const LivePreview = ({ pageTitle, headerTitle, categories, selectedTheme, themes
   const searchRef = useRef(null);
   const timerRef = useRef(null);
 
+  // Helper functions for styling
+  const getSearchBackgroundColor = () => {
+    return selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)';
+  };
+
+  const getZoneLabel = (zone) => {
+    if (zone.label?.length) return zone.label;
+    if (zone.tz === 'America/Chicago') return 'Minneapolis, MN';
+    return zone.tz;
+  };
+
+  const getCredentialBackgroundColor = (hasCredential) => {
+    if (hasCredential) return 'transparent';
+    return selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.05)';
+  };
+
+  const getCredentialBorder = (hasCredential) => {
+    if (hasCredential) return 'none';
+    const borderColor = selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)';
+    return `1px solid ${borderColor}`;
+  };
+
+  const getCredentialColor = (hasCredential) => {
+    if (hasCredential) return getLinkTextColor(selectedTheme);
+    return selectedTheme === 'dark' ? 'rgba(150, 150, 150, 0.6)' : 'rgba(100, 100, 100, 0.5)';
+  };
+
   // Functions to handle hover with delay
   const handleMouseEnter = () => {
     clearTimeout(timerRef.current);
@@ -124,16 +151,25 @@ const LivePreview = ({ pageTitle, headerTitle, categories, selectedTheme, themes
           <div style={{ fontWeight: 500, fontSize: '0.9em', opacity: 0.8 }}>
             {headerTitle}
           </div>
-          <div 
+          <button 
             ref={searchRef}
             className="search-container"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            style={{ height: '32px', display: 'flex', alignItems: 'center' }}
+            style={{ 
+              height: '32px', 
+              display: 'flex', 
+              alignItems: 'center',
+              background: 'transparent',
+              border: 'none',
+              padding: 0,
+              cursor: 'pointer'
+            }}
+            aria-label="Search"
           >
             <div 
               style={{
-                background: showSearch ? (selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)') : 'transparent',
+                background: showSearch ? getSearchBackgroundColor() : 'transparent',
                 border: 'none',
                 cursor: 'pointer',
                 fontSize: '1.1em',
@@ -190,7 +226,7 @@ const LivePreview = ({ pageTitle, headerTitle, categories, selectedTheme, themes
                 />
               </div>
             )}
-          </div>
+          </button>
         </div>
         
         <div style={{ padding: '20px' }}>
@@ -204,7 +240,7 @@ const LivePreview = ({ pageTitle, headerTitle, categories, selectedTheme, themes
                     <div key={z.id} style={{ minWidth: 110, textAlign: 'center' }}>
                       <div style={{ fontSize: '1.2em', fontWeight: 700 }}>{new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: z.tz }).format(new Date())}</div>
                       <div style={{ fontSize: '0.85em', opacity: 0.85 }}>
-                        {z.label?.length ? z.label : (z.tz === 'America/Chicago' ? 'Minneapolis, MN' : z.tz)}
+                        {getZoneLabel(z)}
                       </div>
                     </div>
                   ))}
@@ -243,10 +279,10 @@ const LivePreview = ({ pageTitle, headerTitle, categories, selectedTheme, themes
                         <div>
                           {link?.url && (
                             <button 
-                              onClick={() => openCredentialsForLink && openCredentialsForLink(link)} 
+                              onClick={() => openCredentialsForLink?.(link)} 
                               style={{ 
-                                background: linksWithCredentials.has(link.url) ? 'transparent' : (selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.05)'),
-                                border: linksWithCredentials.has(link.url) ? 'none' : `1px solid ${selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)'}`,
+                                background: getCredentialBackgroundColor(linksWithCredentials.has(link.url)),
+                                border: getCredentialBorder(linksWithCredentials.has(link.url)),
                                 borderRadius: '3px',
                                 padding: linksWithCredentials.has(link.url) ? '0' : '2px 4px',
                                 display: 'flex',
@@ -258,9 +294,7 @@ const LivePreview = ({ pageTitle, headerTitle, categories, selectedTheme, themes
                             >
                               <span style={{
                                 fontSize: '0.9em',
-                                color: linksWithCredentials.has(link.url) 
-                                  ? getLinkTextColor(selectedTheme) 
-                                  : selectedTheme === 'dark' ? 'rgba(150, 150, 150, 0.6)' : 'rgba(100, 100, 100, 0.5)',
+                                color: getCredentialColor(linksWithCredentials.has(link.url)),
                                 opacity: linksWithCredentials.has(link.url) ? 1 : 0.6,
                                 filter: linksWithCredentials.has(link.url) ? 'none' : 'grayscale(70%)',
                                 textShadow: selectedTheme === 'dark' && !linksWithCredentials.has(link.url) ? '0 0 4px rgba(255,255,255,0.2)' : 'none'

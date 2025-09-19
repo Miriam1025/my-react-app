@@ -66,8 +66,7 @@ export const isValidCredentialObject = (obj) => {
   if (!obj || typeof obj !== 'object') return false;
   
   // Must have either username or password
-  if ((!obj.username || !obj.username.trim()) && 
-      (!obj.password || !obj.password.trim())) {
+  if (!obj.username?.trim() && !obj.password?.trim()) {
     return false;
   }
   
@@ -76,7 +75,8 @@ export const isValidCredentialObject = (obj) => {
   
   try {
     new URL(normalizeUrl(obj.url));
-  } catch (e) {
+  } catch (error) {
+    console.error('Invalid URL format:', error.message);
     return false;
   }
   
@@ -135,12 +135,14 @@ export const secureCleanup = (credentials) => {
   // Force garbage collection where possible
   try {
     credentials = null;
-    // In modern browsers, a hint to the GC
-    if (typeof global !== 'undefined' && global.gc) {
-      global.gc();
+    // We can't reliably force garbage collection in browsers
+    // Just set sensitive data to null
+    if (window && window.performance) {
+      window.performance.clearMarks();
+      window.performance.clearMeasures();
     }
-  } catch (e) {
-    console.error('Error in secure cleanup:', e);
+  } catch (error) {
+    console.error('Error in secure cleanup:', error);
   }
 };
 

@@ -2,19 +2,19 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { PinInput } from './PinInput';
-import { setPin } from './utils/credentialsUtils';
+import { setPin as savePinToStorage } from './utils/credentialsUtils';
 import './PinSetupModal.css';
 
 const PinSetupModal = ({ isOpen, onClose, onSuccess }) => {
   const [step, setStep] = useState('create'); // create, confirm, success
-  const [pin, setUserPin] = useState('');
+  const [pin, setPin] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   if (!isOpen) return null;
 
   const handleCreatePin = async (enteredPin) => {
-    setUserPin(enteredPin);
+    setPin(enteredPin);
     setStep('confirm');
   };
 
@@ -27,10 +27,11 @@ const PinSetupModal = ({ isOpen, onClose, onSuccess }) => {
 
     setLoading(true);
     try {
-      await setPin(pin);
+      await savePinToStorage(pin);
       setStep('success');
       setLoading(false);
     } catch (err) {
+      console.error('Error setting PIN:', err);
       setError('Something went wrong. Please try again.');
       setLoading(false);
     }

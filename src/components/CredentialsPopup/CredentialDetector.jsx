@@ -16,14 +16,13 @@ import './CredentialDetector.css';
  * - Cannot directly access browser-saved passwords due to security restrictions
  * - Uses message passing and iframe techniques to coordinate login detection
  */
-const CredentialDetector = ({ onCredentialsDetected, isOpen, onClose }) => {
+const CredentialDetector = ({ onCredentialsDetected }) => {
   const [detectedCredentials, setDetectedCredentials] = useState(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [pin, setPin] = useState('');
   const [siteName, setSiteName] = useState('');
-  const [siteUrl, setSiteUrl] = useState('');
   const promptTimeoutRef = useRef(null);
 
   // Cleanup function to ensure timeouts are cleared
@@ -50,10 +49,9 @@ const CredentialDetector = ({ onCredentialsDetected, isOpen, onClose }) => {
         try {
           const urlObj = new URL(url);
           setSiteName(urlObj.hostname.replace('www.', ''));
-          setSiteUrl(url);
-        } catch (e) {
+        } catch (error) {
+          console.error("Error parsing URL:", error);
           setSiteName('Unknown site');
-          setSiteUrl(url || window.location.href);
         }
 
         setDetectedCredentials({
@@ -204,9 +202,7 @@ const CredentialDetector = ({ onCredentialsDetected, isOpen, onClose }) => {
 };
 
 CredentialDetector.propTypes = {
-  onCredentialsDetected: PropTypes.func,
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func
+  onCredentialsDetected: PropTypes.func
 };
 
 export default CredentialDetector;

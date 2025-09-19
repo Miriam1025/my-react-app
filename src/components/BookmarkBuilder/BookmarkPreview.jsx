@@ -8,6 +8,42 @@ const BookmarkPreview = ({ pageTitle, headerTitle, categories, selectedTheme, th
   const searchRef = useRef(null);
   const timerRef = useRef(null);
 
+  // Helper functions for nested ternaries
+  const getSearchBackgroundColor = () => {
+    if (showSearch) {
+      return selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)';
+    }
+    return 'transparent';
+  };
+
+  const getZoneLabel = (zone) => {
+    if (zone.label?.length) {
+      return zone.label;
+    }
+    return zone.tz === 'America/Chicago' ? 'Minneapolis, MN' : zone.tz;
+  };
+
+  const getCredentialsBackground = (url) => {
+    if (hasCredentials(url)) {
+      return 'transparent';
+    }
+    return selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.05)';
+  };
+
+  const getCredentialsBorder = (url) => {
+    if (hasCredentials(url)) {
+      return 'none';
+    }
+    return `1px solid ${selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)'}`;
+  };
+
+  const getCredentialsColor = (url) => {
+    if (hasCredentials(url)) {
+      return getLinkTextColor(selectedTheme);
+    }
+    return selectedTheme === 'dark' ? 'rgba(150, 150, 150, 0.6)' : 'rgba(100, 100, 100, 0.5)';
+  };
+
   // Functions to handle hover with delay
   const handleMouseEnter = () => {
     clearTimeout(timerRef.current);
@@ -129,16 +165,25 @@ const BookmarkPreview = ({ pageTitle, headerTitle, categories, selectedTheme, th
           <div style={{ fontWeight: 500, fontSize: '0.9em', opacity: 0.8 }}>
             {headerTitle}
           </div>
-          <div 
+          <button 
             ref={searchRef}
             className="search-container"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            style={{ height: '32px', display: 'flex', alignItems: 'center' }}
+            style={{ 
+              height: '32px', 
+              display: 'flex', 
+              alignItems: 'center',
+              background: 'transparent',
+              border: 'none',
+              padding: 0,
+              cursor: 'pointer'
+            }}
+            aria-label="Search"
           >
             <div 
               style={{
-                background: showSearch ? (selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)') : 'transparent',
+                background: getSearchBackgroundColor(),
                 border: 'none',
                 cursor: 'pointer',
                 fontSize: '1.1em',
@@ -195,7 +240,7 @@ const BookmarkPreview = ({ pageTitle, headerTitle, categories, selectedTheme, th
                 />
               </div>
             )}
-          </div>
+          </button>
         </div>
         
         <div style={{ padding: '20px' }}>
@@ -209,7 +254,7 @@ const BookmarkPreview = ({ pageTitle, headerTitle, categories, selectedTheme, th
                     <div key={z.id} style={{ minWidth: 110, textAlign: 'center' }}>
                       <div style={{ fontSize: '1.2em', fontWeight: 700 }}>{new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: z.tz }).format(new Date())}</div>
                       <div style={{ fontSize: '0.85em', opacity: 0.85 }}>
-                        {z.label?.length ? z.label : (z.tz === 'America/Chicago' ? 'Minneapolis, MN' : z.tz)}
+                        {getZoneLabel(z)}
                       </div>
                     </div>
                   ))}
@@ -248,10 +293,10 @@ const BookmarkPreview = ({ pageTitle, headerTitle, categories, selectedTheme, th
                         <div>
                           {link?.url && (
                             <button 
-                              onClick={() => openCredentialsForLink && openCredentialsForLink(link)} 
+                              onClick={() => openCredentialsForLink?.(link)} 
                               style={{ 
-                                background: hasCredentials(link.url) ? 'transparent' : (selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.05)'),
-                                border: hasCredentials(link.url) ? 'none' : `1px solid ${selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)'}`,
+                                background: getCredentialsBackground(link.url),
+                                border: getCredentialsBorder(link.url),
                                 borderRadius: '3px',
                                 padding: hasCredentials(link.url) ? '0' : '2px 4px',
                                 display: 'flex',
@@ -263,9 +308,7 @@ const BookmarkPreview = ({ pageTitle, headerTitle, categories, selectedTheme, th
                             >
                               <span style={{
                                 fontSize: '0.9em',
-                                color: hasCredentials(link.url) 
-                                  ? getLinkTextColor(selectedTheme) 
-                                  : selectedTheme === 'dark' ? 'rgba(150, 150, 150, 0.6)' : 'rgba(100, 100, 100, 0.5)',
+                                color: getCredentialsColor(link.url),
                                 opacity: hasCredentials(link.url) ? 1 : 0.6,
                                 filter: hasCredentials(link.url) ? 'none' : 'grayscale(70%)',
                                 textShadow: selectedTheme === 'dark' && !hasCredentials(link.url) ? '0 0 4px rgba(255,255,255,0.2)' : 'none'

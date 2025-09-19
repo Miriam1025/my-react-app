@@ -22,12 +22,12 @@ const CategoryEditor = ({
             <input
               type="text"
               value={category?.name ?? ''}
-              onChange={(e) => updateCategory && updateCategory(category.id, e.target.value)}
+              onChange={(e) => updateCategory?.(category.id, e.target.value)}
               style={{ flex: 1, padding: '8px', border: '1px solid #ddd', borderRadius: '4px' }}
               placeholder="Category Name"
             />
             <button
-              onClick={() => deleteCategory && deleteCategory(category.id)}
+              onClick={() => deleteCategory?.(category.id)}
               style={{ background: '#f3f4f6', color: '#333', border: '1px solid #ddd', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer' }}
             >
               Remove
@@ -40,25 +40,25 @@ const CategoryEditor = ({
                 <input
                   type="text"
                   value={link.name}
-                  onChange={(e) => updateLink && updateLink(category.id, link.id, 'name', e.target.value)}
+                  onChange={(e) => updateLink?.(category.id, link.id, 'name', e.target.value)}
                   style={{ flex: 1, padding: '6px', border: '1px solid #ddd', borderRadius: '4px' }}
                   placeholder="Link Name"
                 />
                 <input
                   type="text"
                   value={link.url}
-                  onChange={(e) => updateLink && updateLink(category.id, link.id, 'url', e.target.value)}
+                  onChange={(e) => updateLink?.(category.id, link.id, 'url', e.target.value)}
                   style={{ flex: 2, padding: '6px', border: '1px solid #ddd', borderRadius: '4px' }}
                   placeholder="URL"
                 />
                 <button
-                  onClick={() => deleteLink && deleteLink(category.id, link.id)}
+                  onClick={() => deleteLink?.(category.id, link.id)}
                   style={{ background: '#f3f4f6', color: '#333', border: '1px solid #ddd', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer' }}
                 >
                   Remove
                 </button>
                 <button
-                  onClick={() => typeof openAddCreds === 'function' && openAddCreds(link)}
+                  onClick={() => openAddCreds?.(link)}
                   style={{ background: '#e0e7ff', color: '#2563eb', border: 'none', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', marginLeft: '4px' }}
                 >
                   Add Credentials
@@ -66,7 +66,7 @@ const CategoryEditor = ({
               </div>
             ))}
             <button
-              onClick={() => addLink && addLink(category.id)}
+              onClick={() => addLink?.(category.id)}
               style={{ background: '#e0e7ff', color: '#2563eb', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', marginTop: 6 }}
             >
               + Add Link
