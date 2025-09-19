@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const PageSettings = ({ pageTitle, setPageTitle, selectedTheme, setSelectedTheme, themes, widgets, addWidget, removeWidget, updateWidget }) => {
+const PageSettings = ({ pageTitle, setPageTitle, headerTitle, setHeaderTitle, selectedTheme, setSelectedTheme, themes, widgets, addWidget, removeWidget, updateWidget }) => {
   const AVAILABLE_ZONES = [
-    'UTC', 'America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles',
+    'America/Chicago', // Minneapolis uses Central Time (America/Chicago)
+    'UTC', 'America/New_York', 'America/Denver', 'America/Los_Angeles',
     'America/Phoenix', 'America/Anchorage', 'America/Adak', 'Pacific/Honolulu',
     'Europe/London', 'Europe/Paris', 'Europe/Berlin', 'Europe/Madrid', 'Europe/Rome',
     'Asia/Tokyo', 'Asia/Shanghai', 'Asia/Singapore', 'Asia/Kolkata', 'Asia/Dubai',
@@ -43,6 +44,18 @@ const PageSettings = ({ pageTitle, setPageTitle, selectedTheme, setSelectedTheme
   return (
     <div>
       <h2 style={{ marginBottom: '30px', color: '#2c3e50' }}>Build Your Page</h2>
+
+      <div style={{ marginBottom: '30px' }}>
+        <label htmlFor="headerTitle" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#333' }}>Header Title:</label>
+        <input
+          id="headerTitle"
+          type="text"
+          value={headerTitle}
+          onChange={(e) => setHeaderTitle(e.target.value)}
+          style={{ width: '100%', padding: '12px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1em' }}
+          placeholder="My Bookmarks Header"
+        />
+      </div>
 
       <div style={{ marginBottom: '30px' }}>
         <label htmlFor="pageTitle" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#333' }}>Page Title:</label>
@@ -111,7 +124,21 @@ const PageSettings = ({ pageTitle, setPageTitle, selectedTheme, setSelectedTheme
                   <option value="clocks">Clocks</option>
                 </select>
                 <input value={w.label || ''} onChange={(e) => updateWidget(w.id, { ...w, label: e.target.value })} placeholder="Label / content" style={{ flex: 1, padding: 8 }} />
-                <button onClick={() => removeWidget(w.id)} style={{ padding: '6px 8px' }}>Remove</button>
+                <button 
+                  onClick={() => removeWidget(w.id)} 
+                  style={{ 
+                    padding: '6px 10px',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '4px',
+                    background: '#f3f4f6',
+                    color: '#4b5563',
+                    fontWeight: '500',
+                    cursor: 'pointer',
+                    boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                  }}
+                >
+                  Remove
+                </button>
               </div>
 
               {/* Clocks widget configuration */}
@@ -121,14 +148,48 @@ const PageSettings = ({ pageTitle, setPageTitle, selectedTheme, setSelectedTheme
                   {(w.zones || []).map((z) => (
                     <div key={z.id} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                       <select value={z.tz} onChange={(e) => onZoneTzChange(w.id, z.id, e.target.value)} style={{ padding: 8 }}>
-                        {AVAILABLE_ZONES.map(zone => <option key={zone} value={zone}>{zone}</option>)}
+                        {AVAILABLE_ZONES.map(zone => {
+                          // Special handling for Minneapolis (uses America/Chicago)
+                          if (zone === 'America/Chicago') {
+                            return <option key={zone} value={zone}>Minneapolis, MN (Mayo Clinic)</option>;
+                          }
+                          return <option key={zone} value={zone}>{zone}</option>;
+                        })}
                       </select>
                       <input value={z.label || ''} onChange={(e) => onZoneLabelChange(w.id, z.id, e.target.value)} placeholder="Custom label (optional)" style={{ flex: 1, padding: 8 }} />
-                      <button onClick={() => onRemoveZone(w.id, z.id)} style={{ padding: '6px 8px' }}>Remove</button>
+                      <button 
+                        onClick={() => onRemoveZone(w.id, z.id)} 
+                        style={{ 
+                          padding: '6px 10px',
+                          border: '1px solid #d1d5db',
+                          borderRadius: '4px',
+                          background: '#f3f4f6',
+                          color: '#4b5563',
+                          fontWeight: '500',
+                          cursor: 'pointer',
+                          boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                        }}
+                      >
+                        Remove
+                      </button>
                     </div>
                   ))}
                   <div>
-                    <button onClick={() => onAddZone(w.id)} style={{ padding: '8px 10px', borderRadius: 8 }}>+ Add Zone</button>
+                    <button 
+                      onClick={() => onAddZone(w.id)} 
+                      style={{ 
+                        padding: '8px 12px', 
+                        borderRadius: '6px',
+                        background: '#4f46e5',
+                        color: 'white',
+                        border: 'none',
+                        fontWeight: '500',
+                        cursor: 'pointer',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                      }}
+                    >
+                      + Add Zone
+                    </button>
                   </div>
                 </div>
               )}
@@ -144,6 +205,8 @@ export default PageSettings;
 PageSettings.propTypes = {
   pageTitle: PropTypes.string,
   setPageTitle: PropTypes.func,
+  headerTitle: PropTypes.string,
+  setHeaderTitle: PropTypes.func,
   selectedTheme: PropTypes.string,
   setSelectedTheme: PropTypes.func,
   themes: PropTypes.object,

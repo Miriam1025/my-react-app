@@ -1,7 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
+import { hasStoredPin } from '../CredentialsPopup/utils/credentialsUtils';
 
-const LivePreview = ({ pageTitle, headerTitle, categories, selectedTheme, themes, getCategoryHeaderColor, getLinkBackgroundColor, getLinkTextColor, getLinkBorderColor, openCredentialsForLink, widgets, linksWithCredentials = new Set() }) => {
+// Animation keyframes for search popup
+const fadeInAnimation = `
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+`;
+
+const LivePreviewNew = ({ pageTitle, headerTitle, categories, selectedTheme, themes, getCategoryHeaderColor, getLinkBackgroundColor, getLinkTextColor, getLinkBorderColor, openCredentialsForLink, widgets, linksWithCredentials = new Set() }) => {
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const safeCategories = Array.isArray(categories) ? categories : [];
@@ -93,6 +102,11 @@ const LivePreview = ({ pageTitle, headerTitle, categories, selectedTheme, themes
       }
     };
   }, []);
+  
+  // Function to check if credentials exist for a URL
+  const hasCredsForUrl = (url) => {
+    return linksWithCredentials.has(url);
+  };
   
   return (
     <div style={{ background: 'white', borderRadius: '15px', padding: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
@@ -245,25 +259,25 @@ const LivePreview = ({ pageTitle, headerTitle, categories, selectedTheme, themes
                             <button 
                               onClick={() => openCredentialsForLink && openCredentialsForLink(link)} 
                               style={{ 
-                                background: linksWithCredentials.has(link.url) ? 'transparent' : (selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.05)'),
-                                border: linksWithCredentials.has(link.url) ? 'none' : `1px solid ${selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)'}`,
+                                background: hasCredsForUrl(link.url) ? 'transparent' : (selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.05)'),
+                                border: hasCredsForUrl(link.url) ? 'none' : `1px solid ${selectedTheme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.2)'}`,
                                 borderRadius: '3px',
-                                padding: linksWithCredentials.has(link.url) ? '0' : '2px 4px',
+                                padding: hasCredsForUrl(link.url) ? '0' : '2px 4px',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 cursor: 'pointer'
                               }} 
-                              title={linksWithCredentials.has(link.url) ? "View credentials" : "No credentials stored"}
+                              title={hasCredsForUrl(link.url) ? "View credentials" : "No credentials stored"}
                             >
                               <span style={{
                                 fontSize: '0.9em',
-                                color: linksWithCredentials.has(link.url) 
+                                color: hasCredsForUrl(link.url) 
                                   ? getLinkTextColor(selectedTheme) 
                                   : selectedTheme === 'dark' ? 'rgba(150, 150, 150, 0.6)' : 'rgba(100, 100, 100, 0.5)',
-                                opacity: linksWithCredentials.has(link.url) ? 1 : 0.6,
-                                filter: linksWithCredentials.has(link.url) ? 'none' : 'grayscale(70%)',
-                                textShadow: selectedTheme === 'dark' && !linksWithCredentials.has(link.url) ? '0 0 4px rgba(255,255,255,0.2)' : 'none'
+                                opacity: hasCredsForUrl(link.url) ? 1 : 0.6,
+                                filter: hasCredsForUrl(link.url) ? 'none' : 'grayscale(70%)',
+                                textShadow: selectedTheme === 'dark' && !hasCredsForUrl(link.url) ? '0 0 4px rgba(255,255,255,0.2)' : 'none'
                               }}>
                                 🔒
                               </span>
@@ -286,9 +300,9 @@ const LivePreview = ({ pageTitle, headerTitle, categories, selectedTheme, themes
   );
 };
 
-export default LivePreview;
+export default LivePreviewNew;
 
-LivePreview.propTypes = {
+LivePreviewNew.propTypes = {
   pageTitle: PropTypes.string,
   headerTitle: PropTypes.string,
   categories: PropTypes.array,

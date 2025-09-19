@@ -123,6 +123,7 @@ const CredentialsPopup = ({
                   hasError={pinError}
                   isLoading={isLoading}
                   errorMessage="Could not set PIN. Try again."
+                  labelText="Create 4-Digit PIN"
                 />
               )}
 
@@ -132,6 +133,7 @@ const CredentialsPopup = ({
                   hasError={pinError}
                   isLoading={isLoading}
                   errorMessage="Invalid PIN. Please try again."
+                  labelText="Enter PIN"
                 />
               )}
             </div>

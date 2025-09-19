@@ -1,37 +1,17 @@
-  // Add a category to a group
-  const addCategoryToGroup = (groupId) => {
-    setGroups(groups.map(group =>
-      group.id === groupId
-        ? {
-            ...group,
-            categories: [
-              ...group.categories,
-              { id: Date.now(), name: `New Category ${group.categories.length + 1}` }
-            ]
-          }
-        : group
-    ));
-  };
-  // Add a new group
-  const addGroup = () => {
-    const newGroup = {
-      id: Date.now(),
-      name: `New Group ${groups.length + 1}`,
-      categories: []
-    };
-    setGroups([...groups, newGroup]);
-  };
+// Only categories and links, no groups
 import React, { useState } from 'react';
 import CredentialsPopup from './CredentialsPopup';
-import AddCredentialsModal from './CredentialsPopup/AddCredentialsModal';
+import PasswordFeature from './CredentialsPopup/PasswordFeature';
+import AutoCredentialDetector from './CredentialsPopup/AutoCredentialDetector';
 import PageSettings from './BookmarkBuilder/PageSettings';
-import CategoryGroupsEditor from './BookmarkBuilder/CategoryGroupsEditor';
+// ...existing code...
 import CategoryEditor from './BookmarkBuilder/CategoryEditor';
-import LivePreview from './BookmarkBuilder/LivePreview';
+import BookmarkPreview from './BookmarkBuilder/BookmarkPreview';
 
 function BookmarkBuilder() {
   const [selectedTheme, setSelectedTheme] = useState('corporate');
   const [pageTitle, setPageTitle] = useState('My Bookmarks');
+  const [headerTitle, setHeaderTitle] = useState('My Bookmarks');
   const [categories, setCategories] = useState([
     {
       id: 1,
@@ -42,15 +22,18 @@ function BookmarkBuilder() {
       ]
     }
   ]);
-  // New: State for category groups
-  const [groups, setGroups] = useState([]);
+  // ...existing code...
 
   // Credentials popup state (local demo integration)
   const [isCredPopupOpen, setIsCredPopupOpen] = useState(false);
   const [activeCredentials, setActiveCredentials] = useState(null);
   const [activeLinkUrl, setActiveLinkUrl] = useState(null);
-  const [showAddCredModalFor, setShowAddCredModalFor] = useState(null);
   const [widgets, setWidgets] = useState([]);
+  
+  // New password feature state
+  const [passwordFeatureEnabled, setPasswordFeatureEnabled] = useState(
+    localStorage.getItem('passwordFeatureEnabled') !== 'false'
+  );
 
   const themes = {
     corporate: {
@@ -130,26 +113,50 @@ function BookmarkBuilder() {
     ));
   };
 
+  // Track the URL for credential detection
+  const [currentUrlForCredentials, setCurrentUrlForCredentials] = useState(null);
+  const [linksWithCredentials, setLinksWithCredentials] = useState(new Set());
+
   const openCredentialsForLink = (link) => {
     // Do not store demo credentials in code: just open popup and let it attempt to load encrypted credentials for the URL on PIN entry.
     setActiveCredentials(null);
     setActiveLinkUrl(link.url);
     setIsCredPopupOpen(true);
+
+    // Set the current URL for credential detection if password feature is enabled
+    if (passwordFeatureEnabled) {
+      setCurrentUrlForCredentials(link.url);
+    }
   };
 
-  const openAddCreds = (link) => {
-    setShowAddCredModalFor(link);
-  };
-
-  const handleSaveCredentials = async () => {
-    // The modal's form handles saving; this placeholder can be used for callbacks
-    setShowAddCredModalFor(null);
+  // Handle credentials detection and saving
+  const handleSaveCredentials = async (credentials) => {
+    // If credentials were provided from browser detection, show success message
+    if (credentials && credentials.url) {
+      console.log('Credentials saved:', credentials.url);
+      
+      // Here you would typically call your encryption and storage functions
+      // For example:
+      // await saveCredentialsForUrl(credentials.url, {
+      //   username: credentials.username,
+      //   password: credentials.password
+      // });
+      
+      // Track that this link now has credentials
+      setLinksWithCredentials(prev => new Set([...prev, credentials.url]));
+      
+      // You might want to update the UI or show a notification
+      alert(`Successfully saved credentials for ${credentials.url}`);
+    }
   };
 
   const closeCredPopup = () => {
     setIsCredPopupOpen(false);
     setActiveCredentials(null);
     setActiveLinkUrl(null);
+    
+    // Clear the current URL for credential detection
+    setCurrentUrlForCredentials(null);
   };
 
   const deleteCategory = (categoryId) => {
@@ -316,7 +323,11 @@ function BookmarkBuilder() {
           // build clocks markup without nested template literals for lint friendliness
           const clockBits = (w.zones || []).map(z => {
             const timeStr = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: z.tz });
-            const label = z.label?.length ? z.label : z.tz;
+            // Custom display for Minneapolis (which uses America/Chicago timezone)
+            let label = z.label?.length ? z.label : z.tz;
+            if (z.tz === 'America/Chicago' && !z.label) {
+              label = 'Minneapolis, MN';
+            }
             return `<div style="min-width:110px; text-align:center;"><div style="font-size:1.2em; font-weight:700;">${timeStr}</div><div style="font-size:0.85em; opacity:0.85;">${label}</div></div>`;
           }).join('');
           return `<div style="display:flex; gap:12px; margin-top:12px; background:#0f172a; color:white; padding:12px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.15);">${clockBits}</div>`;
@@ -381,36 +392,29 @@ function BookmarkBuilder() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '40px' }}>
           
           <div style={{ background: 'white', borderRadius: '15px', padding: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
-            <PageSettings pageTitle={pageTitle} setPageTitle={setPageTitle} selectedTheme={selectedTheme} setSelectedTheme={setSelectedTheme} themes={themes} widgets={widgets} addWidget={addWidget} removeWidget={removeWidget} updateWidget={updateWidget} />
+            <PageSettings 
+              pageTitle={pageTitle} 
+              setPageTitle={setPageTitle} 
+              headerTitle={headerTitle}
+              setHeaderTitle={setHeaderTitle}
+              selectedTheme={selectedTheme} 
+              setSelectedTheme={setSelectedTheme} 
+              themes={themes} 
+              widgets={widgets} 
+              addWidget={addWidget} 
+              removeWidget={removeWidget} 
+              updateWidget={updateWidget} 
+            />
             <div style={{ marginTop: 12 }}>
-              <CategoryGroupsEditor
-                groups={groups}
-                addGroup={addGroup}
-                updateGroup={(groupId, newName) => {
-                  setGroups(groups.map(group =>
-                    group.id === groupId ? { ...group, name: newName } : group
-                  ));
-                }}
-                deleteGroup={(groupId) => {
-                  setGroups(groups.filter(group => group.id !== groupId));
-                }}
-                addCategoryToGroup={addCategoryToGroup}
-                removeCategoryFromGroup={(groupId, categoryId) => {
-                  setGroups(groups.map(group =>
-                    group.id === groupId
-                      ? {
-                          ...group,
-                          categories: group.categories.filter(cat => cat.id !== categoryId)
-                        }
-                      : group
-                  ));
-                }}
-              />
               <CategoryEditor
                 categories={categories}
                 addCategory={addCategory}
                 updateCategory={updateCategory}
                 deleteCategory={deleteCategory}
+                addLink={addLink}
+                updateLink={updateLink}
+                deleteLink={deleteLink}
+                openAddCreds={openAddCreds}
               />
             </div>
             <div style={{ marginTop: 12 }}>
@@ -436,10 +440,22 @@ function BookmarkBuilder() {
                 📥 Download Your Bookmark Page
               </button>
             </div>
+            
+            {/* Password Feature */}
+            <div style={{ marginTop: 20 }}>
+              <PasswordFeature 
+                enabled={passwordFeatureEnabled}
+                onToggleEnabled={(value) => {
+                  setPasswordFeatureEnabled(value);
+                  localStorage.setItem('passwordFeatureEnabled', value);
+                }}
+              />
+            </div>
           </div>
 
-          <LivePreview
+          <BookmarkPreview
             pageTitle={pageTitle}
+            headerTitle={headerTitle}
             categories={categories}
             selectedTheme={selectedTheme}
             themes={themes}
@@ -448,25 +464,29 @@ function BookmarkBuilder() {
             getLinkTextColor={getLinkTextColor}
             getLinkBorderColor={getLinkBorderColor}
             openCredentialsForLink={openCredentialsForLink}
-            openAddCreds={openAddCreds}
             widgets={widgets}
+            linksWithCredentials={linksWithCredentials}
           />
         </div>
       </div>
     </div>
     {/* Credentials popup — mounted so it shows after deployment when triggered */}
-    <AddCredentialsModal
-      isOpen={!!showAddCredModalFor}
-      onClose={() => setShowAddCredModalFor(null)}
-      onSave={handleSaveCredentials}
-      defaultUrl={showAddCredModalFor ? showAddCredModalFor.url : ''}
-    />
     <CredentialsPopup
       isOpen={isCredPopupOpen}
       onClose={closeCredPopup}
       linkUrl={activeLinkUrl}
       credentials={activeCredentials || {}}
     />
+    
+    {/* Auto Credential Detector */}
+    {passwordFeatureEnabled && (
+      <AutoCredentialDetector
+        enabled={true}
+        url={currentUrlForCredentials}
+        onCredentialsSaved={handleSaveCredentials}
+        onClose={() => setCurrentUrlForCredentials(null)}
+      />
+    )}
     </>
   );
 }

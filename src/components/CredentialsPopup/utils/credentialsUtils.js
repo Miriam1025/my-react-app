@@ -132,6 +132,10 @@ export const secureClear = (value) => {
   }
 };
 
+export const hasCredentialsForUrl = (url) => {
+  return !!localStorage.getItem(`creds:${url}`);
+};
+
 /**
  * Formats credentials for display
  * @param {Object} credentials - The credentials object

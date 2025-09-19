@@ -1,0 +1,198 @@
+/* src/components/CredentialsPopup/PinSetupModal.css */
+
+.pin-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.pin-modal {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 420px;
+  position: relative;
+  animation: slideIn 0.3s ease-out;
+  overflow: hidden;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.pin-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #64748b;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.pin-modal-close:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #334155;
+}
+
+.pin-modal-content {
+  padding: 30px;
+}
+
+.pin-modal-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.pin-modal-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.pin-modal-icon.success {
+  background: #10b981;
+  color: white;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.pin-modal h2 {
+  font-size: 24px;
+  margin-bottom: 12px;
+  color: #1e293b;
+}
+
+.pin-modal p {
+  color: #64748b;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.pin-modal-success {
+  text-align: center;
+  padding: 20px 0;
+}
+
+.pin-modal-button {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.pin-modal-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+.pin-modal-button:active {
+  transform: translateY(0);
+}
+
+/* Ensure PIN input styling is consistent */
+.pin-input__fields {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.pin-input__field {
+  width: 50px;
+  height: 60px;
+  font-size: 24px;
+  text-align: center;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pin-input__field:focus {
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.3);
+  outline: none;
+}
+
+.pin-input__field--error {
+  border-color: #ef4444;
+}
+
+.pin-input__error {
+  display: flex;
+  align-items: center;
+  color: #ef4444;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.pin-input__error-icon {
+  margin-right: 6px;
+}
+
+.pin-input__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.pin-input__spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #e2e8f0;
+  border-top: 2px solid #7c3aed;
+  border-radius: 50%;
+  margin-right: 10px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

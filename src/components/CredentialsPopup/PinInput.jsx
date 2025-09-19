@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
-export const PinInput = ({ onSubmit, hasError, isLoading, errorMessage }) => {
+export const PinInput = ({ onSubmit, hasError, isLoading, errorMessage, labelText }) => {
   const [pin, setPin] = useState(['', '', '', '']);
   const inputRefs = useRef([]);
 
@@ -77,7 +77,7 @@ export const PinInput = ({ onSubmit, hasError, isLoading, errorMessage }) => {
   return (
     <div className="pin-input">
       <div className="pin-input__header">
-        <h4 className="pin-input__title">Enter 4-Digit PIN</h4>
+        <h4 className="pin-input__title">{labelText || "Enter 4-Digit PIN"}</h4>
         <p className="pin-input__description">
           Enter your PIN to view stored credentials
         </p>
@@ -125,5 +125,6 @@ PinInput.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   hasError: PropTypes.bool,
   isLoading: PropTypes.bool,
-  errorMessage: PropTypes.string
+  errorMessage: PropTypes.string,
+  labelText: PropTypes.string
 };
